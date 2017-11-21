@@ -57,3 +57,14 @@ typings/
 # dotenv environment variables file
 .env
 
+.idea
+.idea/
+.DS_Store
+node_modules/
+.project
+dist
+dist/*
+src/config/*.tmp
+src/config/env.js
+npm-debug.log
+
