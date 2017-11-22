@@ -58,11 +58,11 @@
                   <Submenu name="1">
                       <template slot="title">
                           <Icon type="ios-navigate" :size="iconSize"></Icon>
-                          <span class="layout-text">导航一</span>
+                          <span class="layout-text">功能</span>
                       </template>
-                      <Menu-item name="page1">选项 1</Menu-item>
-                      <Menu-item name="page2">选项 2</Menu-item>
-                      <Menu-item name="page3">选项 3</Menu-item>
+                      <Menu-item name="materialManage">灵感素材管理</Menu-item>
+                      <Menu-item name="page2">搭配管理</Menu-item>
+                      <Menu-item name="page3">设计师管理</Menu-item>
                   </Submenu>
                   <Submenu name="2">
                       <template slot="title">
@@ -99,12 +99,12 @@
               <div class="layout-content">
                   <div class="layout-content-main" :style="contentStyle">
                       <router-view>
-                        
+
                       </router-view>
                   </div>
               </div>
               <div class="layout-copy">
-                  2016-2017 &copy; 027wh
+                  2016-2017 &copy; 简码科技
               </div>
           </i-col>
       </Row>
@@ -139,9 +139,8 @@
                 }
             },
             menuClick(name){
-              console.log(name);
-              if (name == 'page1'){
-                this.$router.push('menu1');
+              if (name == 'materialManage'){
+                this.$router.push('materialManage');
               }
               else if (name == 'page2'){
                 this.$router.push('menu2');

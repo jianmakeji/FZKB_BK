@@ -5,11 +5,11 @@ const routers = [{
         },
         component: (resolve) => require(['./views/index.vue'], resolve)
     },{
-      path: '/menu1',
+      path: '/materialManage',
       meta: {
-          title: 'menu1'
+          title: 'materialManage'
       },
-      component: (resolve) => require(['./views/page1.vue'], resolve)
+      component: (resolve) => require(['./views/materialManage.vue'], resolve)
     },{
       path: '/menu2',
       meta: {
