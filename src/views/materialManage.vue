@@ -21,6 +21,22 @@
     float: right;
     margin-top: 10px;
   }
+
+  .panel{
+    margin-top: 10px;
+  }
+
+  .conditionItem{
+    width: 100px;
+    margin-right: 30px;
+  }
+
+  .tag{
+    width: 60px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+  }
 </style>
 <template>
   <div>
@@ -29,6 +45,74 @@
         <Button type="primary" icon="ios-search" class="searchBtn">搜索</Button>
         <Input placeholder="请输入..." class="serarchText"></Input>
     </div>
+    <div class="panel">
+      <Card>
+        <p slot="title">
+            <Icon type="eye"></Icon>
+            筛选面板
+        </p>
+        <div id="conditionPanel">
+          <p>
+            <Button type="text" class="conditionItem">种类：</Button>
+            <Button type="dashed" v-on:click="tagClick">艺术品</Button>
+            <Tag class="tag" checkable>建筑</Tag>
+            <Tag class="tag" checkable>动物</Tag>
+            <Tag class="tag" checkable>植物</Tag>
+            <Tag class="tag" checkable>风景</Tag>
+          </p>
+          <p>
+            <Button type="text" class="conditionItem">简单-复杂：</Button>
+            <Tag class="tag" checkable>-3</Tag>
+            <Tag class="tag" checkable>-2.5</Tag>
+            <Tag class="tag" checkable>-2</Tag>
+            <Tag class="tag" checkable>-1.5</Tag>
+            <Tag class="tag" checkable>-1</Tag>
+            <Tag class="tag" checkable>-0.5</Tag>
+            <Tag class="tag" checkable>0</Tag>
+            <Tag class="tag" checkable>0.5</Tag>
+            <Tag class="tag" checkable>1</Tag>
+            <Tag class="tag" checkable>1.5</Tag>
+            <Tag class="tag" checkable>2</Tag>
+            <Tag class="tag" checkable>2.5</Tag>
+            <Tag class="tag" checkable>3</Tag>
+          </p>
+
+          <p>
+            <Button type="text" class="conditionItem">硬朗-圆润：</Button>
+            <Tag class="tag" checkable>-3</Tag>
+            <Tag class="tag" checkable>-2.5</Tag>
+            <Tag class="tag" checkable>-2</Tag>
+            <Tag class="tag" checkable>-1.5</Tag>
+            <Tag class="tag" checkable>-1</Tag>
+            <Tag class="tag" checkable>-0.5</Tag>
+            <Tag class="tag" checkable>0</Tag>
+            <Tag class="tag" checkable>0.5</Tag>
+            <Tag class="tag" checkable>1</Tag>
+            <Tag class="tag" checkable>1.5</Tag>
+            <Tag class="tag" checkable>2</Tag>
+            <Tag class="tag" checkable>2.5</Tag>
+            <Tag class="tag" checkable>3</Tag>
+          </p>
+          <p>
+            <Button type="text" class="conditionItem">冷酷-温暖：</Button>
+            <Tag class="tag" checkable>-3</Tag>
+            <Tag class="tag" checkable>-2.5</Tag>
+            <Tag class="tag" checkable>-2</Tag>
+            <Tag class="tag" checkable>-1.5</Tag>
+            <Tag class="tag" checkable>-1</Tag>
+            <Tag class="tag" checkable>-0.5</Tag>
+            <Tag class="tag" checkable>0</Tag>
+            <Tag class="tag" checkable>0.5</Tag>
+            <Tag class="tag" checkable>1</Tag>
+            <Tag class="tag" checkable>1.5</Tag>
+            <Tag class="tag" checkable>2</Tag>
+            <Tag class="tag" checkable>2.5</Tag>
+            <Tag class="tag" checkable>3</Tag>
+          </p>
+        </div>
+        <div style="text-align:center" id="arrowArea"><Icon id="arrowIcon" type="chevron-up"></Icon></div>
+      </Card>
+    </div>
     <div style="margin-top:10px">
         <Table border :columns="columns" :data="data"></Table>
         <Page class="page" :total="100" show-elevator></Page>
@@ -36,6 +120,7 @@
   </div>
 </template>
 <script>
+import $ from 'jquery'
 export default {
         data () {
             return {
@@ -219,18 +304,10 @@ export default {
                         style2:'0.5',
                         style3:'2',
                         createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'John Brown',
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
                     }
 
-                ]
+                ],
+                value1: '1'
             }
         },
         methods: {
@@ -245,7 +322,35 @@ export default {
             },
             remove (index) {
                 this.data.splice(index, 1);
+            },
+            tagClick(){
+              alert('tag click');
             }
         }
     }
+
+    $(document).ready(function(){
+      var collapse = 1;
+      $("#arrowArea").click(function(){
+        if (collapse == 1){
+          $("#conditionPanel").animate({
+            height:'5px'
+          }, function() {
+            $("#conditionPanel").hide();
+          });
+          $("#arrowIcon").removeClass("ivu-icon-chevron-up");
+          $("#arrowIcon").addClass("ivu-icon-chevron-down");
+          collapse = 0;
+        }
+        else{
+          $("#conditionPanel").show();
+          $("#conditionPanel").animate({
+            height:'130px'
+          });
+          $("#arrowIcon").removeClass("ivu-icon-chevron-down");
+          $("#arrowIcon").addClass("ivu-icon-chevron-up");
+          collapse = 1;
+        }
+      });
+    });
 </script>

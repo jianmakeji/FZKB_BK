@@ -77,10 +77,16 @@ module.exports = {
             }
         ]
     },
+    plugins:[new webpack.ProvidePlugin({
+        $:"jquery",
+        jQuery: "jquery",
+        "windows.jQuery": "jquery"
+    })],
     resolve: {
         extensions: ['.js', '.vue'],
         alias: {
-            'vue': 'vue/dist/vue.esm.js'
+            'vue': 'vue/dist/vue.esm.js',
+            'jquery:'jquery'
         }
     }
 };
