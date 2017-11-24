@@ -31,17 +31,32 @@
     margin-right: 30px;
   }
 
-  .tag{
+  .Button{
     width: 60px;
     margin-left: 10px;
     margin-right: 10px;
     text-align: center;
   }
+
+  .tagSection{
+    margin-top:5px;
+  }
+
+  .layout-breadcrumb{
+      padding: 10px 15px 10px;
+  }
 </style>
 <template>
   <div>
+    <div class="layout-breadcrumb">
+        <Breadcrumb>
+            <Breadcrumb-item id="BreadcrumbItem1" href="/"><Icon type="ios-home-outline"></Icon>首页</Breadcrumb-item>
+            <Breadcrumb-item id="BreadcrumbItem2" href="#"><Icon type="social-buffer-outline"></Icon>灵感素材管理</Breadcrumb-item>
+        </Breadcrumb>
+    </div>
+    <hr style="height:1px;border:none;border-top:1px dashed #dddee1;"/>
     <div>
-        <Button type="primary" class="addMaterial">+ 新建素材</Button>
+        <Button type="primary" class="addMaterial" @click="addMaterial">+ 新建素材</Button>
         <Button type="primary" icon="ios-search" class="searchBtn">搜索</Button>
         <Input placeholder="请输入..." class="serarchText"></Input>
     </div>
@@ -52,65 +67,65 @@
             筛选面板
         </p>
         <div id="conditionPanel">
-          <p>
+          <p class="tagSection">
             <Button type="text" class="conditionItem">种类：</Button>
-            <Button type="dashed" v-on:click="tagClick">艺术品</Button>
-            <Tag class="tag" checkable>建筑</Tag>
-            <Tag class="tag" checkable>动物</Tag>
-            <Tag class="tag" checkable>植物</Tag>
-            <Tag class="tag" checkable>风景</Tag>
+            <Button type="dashed" v-on:click="ButtonClick">艺术品</Button>
+            <Button type="dashed" >建筑</Button>
+            <Button type="dashed" >动物</Button>
+            <Button type="dashed" >植物</Button>
+            <Button type="dashed" >风景</Button>
           </p>
-          <p>
+          <p class="tagSection">
             <Button type="text" class="conditionItem">简单-复杂：</Button>
-            <Tag class="tag" checkable>-3</Tag>
-            <Tag class="tag" checkable>-2.5</Tag>
-            <Tag class="tag" checkable>-2</Tag>
-            <Tag class="tag" checkable>-1.5</Tag>
-            <Tag class="tag" checkable>-1</Tag>
-            <Tag class="tag" checkable>-0.5</Tag>
-            <Tag class="tag" checkable>0</Tag>
-            <Tag class="tag" checkable>0.5</Tag>
-            <Tag class="tag" checkable>1</Tag>
-            <Tag class="tag" checkable>1.5</Tag>
-            <Tag class="tag" checkable>2</Tag>
-            <Tag class="tag" checkable>2.5</Tag>
-            <Tag class="tag" checkable>3</Tag>
+            <Button type="dashed" >-3</Button>
+            <Button type="dashed" >-2.5</Button>
+            <Button type="dashed" >-2</Button>
+            <Button type="dashed" >-1.5</Button>
+            <Button type="dashed" >-1</Button>
+            <Button type="dashed" >-0.5</Button>
+            <Button type="dashed" >0</Button>
+            <Button type="dashed" >0.5</Button>
+            <Button type="dashed" >1</Button>
+            <Button type="dashed" >1.5</Button>
+            <Button type="dashed" >2</Button>
+            <Button type="dashed" >2.5</Button>
+            <Button type="dashed" >3</Button>
           </p>
 
-          <p>
+          <p class="tagSection">
             <Button type="text" class="conditionItem">硬朗-圆润：</Button>
-            <Tag class="tag" checkable>-3</Tag>
-            <Tag class="tag" checkable>-2.5</Tag>
-            <Tag class="tag" checkable>-2</Tag>
-            <Tag class="tag" checkable>-1.5</Tag>
-            <Tag class="tag" checkable>-1</Tag>
-            <Tag class="tag" checkable>-0.5</Tag>
-            <Tag class="tag" checkable>0</Tag>
-            <Tag class="tag" checkable>0.5</Tag>
-            <Tag class="tag" checkable>1</Tag>
-            <Tag class="tag" checkable>1.5</Tag>
-            <Tag class="tag" checkable>2</Tag>
-            <Tag class="tag" checkable>2.5</Tag>
-            <Tag class="tag" checkable>3</Tag>
+            <Button type="dashed" >-3</Button>
+            <Button type="dashed" >-2.5</Button>
+            <Button type="dashed" >-2</Button>
+            <Button type="dashed" >-1.5</Button>
+            <Button type="dashed" >-1</Button>
+            <Button type="dashed" >-0.5</Button>
+            <Button type="dashed" >0</Button>
+            <Button type="dashed" >0.5</Button>
+            <Button type="dashed" >1</Button>
+            <Button type="dashed" >1.5</Button>
+            <Button type="dashed" >2</Button>
+            <Button type="dashed" >2.5</Button>
+            <Button type="dashed" >3</Button>
           </p>
-          <p>
+          <p class="tagSection">
             <Button type="text" class="conditionItem">冷酷-温暖：</Button>
-            <Tag class="tag" checkable>-3</Tag>
-            <Tag class="tag" checkable>-2.5</Tag>
-            <Tag class="tag" checkable>-2</Tag>
-            <Tag class="tag" checkable>-1.5</Tag>
-            <Tag class="tag" checkable>-1</Tag>
-            <Tag class="tag" checkable>-0.5</Tag>
-            <Tag class="tag" checkable>0</Tag>
-            <Tag class="tag" checkable>0.5</Tag>
-            <Tag class="tag" checkable>1</Tag>
-            <Tag class="tag" checkable>1.5</Tag>
-            <Tag class="tag" checkable>2</Tag>
-            <Tag class="tag" checkable>2.5</Tag>
-            <Tag class="tag" checkable>3</Tag>
+            <Button type="dashed" >-3</Button>
+            <Button type="dashed" >-2.5</Button>
+            <Button type="dashed" >-2</Button>
+            <Button type="dashed" >-1.5</Button>
+            <Button type="dashed" >-1</Button>
+            <Button type="dashed" >-0.5</Button>
+            <Button type="dashed" >0</Button>
+            <Button type="dashed" >0.5</Button>
+            <Button type="dashed" >1</Button>
+            <Button type="dashed" >1.5</Button>
+            <Button type="dashed" >2</Button>
+            <Button type="dashed" >2.5</Button>
+            <Button type="dashed" >3</Button>
           </p>
         </div>
-        <div style="text-align:center" id="arrowArea"><Icon id="arrowIcon" type="chevron-up"></Icon></div>
+        <div style="text-align:center;margin-top:10px" id="arrowArea"><Icon id="arrowIcon" type="chevron-up"></Icon></div>
       </Card>
     </div>
     <div style="margin-top:10px">
@@ -323,13 +338,17 @@ export default {
             remove (index) {
                 this.data.splice(index, 1);
             },
-            tagClick(){
-              alert('tag click');
+            ButtonClick(){
+              alert('Button click');
+            },
+            addMaterial(){
+              this.$router.push('addMaterial');
             }
         }
     }
 
     $(document).ready(function(){
+      BreadcrumbItem2.to = '/materialManage';
       var collapse = 1;
       $("#arrowArea").click(function(){
         if (collapse == 1){
@@ -345,7 +364,7 @@ export default {
         else{
           $("#conditionPanel").show();
           $("#conditionPanel").animate({
-            height:'130px'
+            height:'150px'
           });
           $("#arrowIcon").removeClass("ivu-icon-chevron-down");
           $("#arrowIcon").addClass("ivu-icon-chevron-up");

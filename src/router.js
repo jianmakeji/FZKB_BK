@@ -11,29 +11,29 @@ const routers = [{
       },
       component: (resolve) => require(['./views/materialManage.vue'], resolve)
     },{
-      path: '/menu2',
+      path: '/addMaterial',
       meta: {
-          title: 'menu2'
+          title: 'addMaterial'
       },
-      component: (resolve) => require(['./views/page2.vue'], resolve)
+      component: (resolve) => require(['./views/addMaterial.vue'], resolve)
     },{
-      path: '/menu3',
+      path: '/matchManage',
       meta: {
-          title: 'menu3'
+          title: 'matchManage'
       },
-      component: (resolve) => require(['./views/page3.vue'], resolve)
+      component: (resolve) => require(['./views/matchManage.vue'], resolve)
     },{
-      path: '/menu4',
+      path: '/designManage',
       meta: {
-          title: 'menu4'
+          title: 'designManage'
       },
-      component: (resolve) => require(['./views/page4.vue'], resolve)
+      component: (resolve) => require(['./views/designManage.vue'], resolve)
     },{
-      path: '/menu5',
+      path: '/addDesigner',
       meta: {
-          title: 'menu5'
+          title: 'addDesigner'
       },
-      component: (resolve) => require(['./views/page5.vue'], resolve)
+      component: (resolve) => require(['./views/addDesigner.vue'], resolve)
     },{
       path: '/menu6',
       meta: {
