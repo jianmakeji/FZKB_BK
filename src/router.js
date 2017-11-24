@@ -7,43 +7,43 @@ const routers = [{
     },{
       path: '/materialManage',
       meta: {
-          title: 'materialManage'
+          title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/materialManage.vue'], resolve)
     },{
       path: '/addMaterial',
       meta: {
-          title: 'addMaterial'
+          title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/addMaterial.vue'], resolve)
     },{
       path: '/matchManage',
       meta: {
-          title: 'matchManage'
+          title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/matchManage.vue'], resolve)
     },{
       path: '/designManage',
       meta: {
-          title: 'designManage'
+          title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/designManage.vue'], resolve)
     },{
       path: '/addDesigner',
       meta: {
-          title: 'addDesigner'
+          title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/addDesigner.vue'], resolve)
     },{
       path: '/menu6',
       meta: {
-          title: 'menu6'
+          title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/page6.vue'], resolve)
     },{
       path: '/menu7',
       meta: {
-          title: 'menu7'
+          title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/page7.vue'], resolve)
     }

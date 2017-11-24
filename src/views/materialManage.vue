@@ -144,14 +144,16 @@ export default {
                         title: '图片',
                         key: 'pic',
                         render: (h, params) => {
-                            return h('div', [
-                                h('Icon', {
-                                    props: {
-                                        type: 'person'
+                            return
+                                h('img', {
+                                    domProps:{
+                                      src:params.row.pic
+                                    },
+                                    style: {
+                                        width: '100px',
+                                        height:'100px'
                                     }
-                                }),
-                                h('strong', params.row.pic)
-                            ]);
+                                });
                         }
                     },
                     {

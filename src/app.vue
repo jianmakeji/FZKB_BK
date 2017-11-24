@@ -6,7 +6,7 @@
         border-radius: 4px;
         overflow: hidden;
     }
-    
+
     .layout-content{
         min-height: 200px;
         margin: 15px;
@@ -99,7 +99,7 @@
             },
             contentStyle: function(){
            		var innerHeight = window.innerHeight;
-           		var contentHeight = innerHeight-50-110;
+           		var contentHeight = innerHeight-50-80;
             	return "min-height: "+contentHeight+"px";
             }
         },
