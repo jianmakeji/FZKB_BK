@@ -146,6 +146,9 @@ export default {
                         render: (h, params) => {
                             return
                                 h('img', {
+                                  attrs:{
+                                    src:params.row.pic
+                                  },
                                     domProps:{
                                       src:params.row.pic
                                     },
