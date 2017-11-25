@@ -145,7 +145,15 @@ export default {
                         title: '图片',
                         key: 'pic',
                         render: (h, params) => {
-                            return h('<img src="'+params.row.pic+'" style="width:100px,height:100px"/>');
+                            return  h('img', {
+                                    attrs: {
+                                      src: params.row.pic
+                                    },
+                                    style: {
+                                      width:'100px',
+                                      height:'100px'
+                                    }
+                                  })
                         }
                     },
                     {
