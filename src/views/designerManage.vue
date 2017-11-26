@@ -78,6 +78,7 @@
                             title: '用户名',
                             key: 'username',
                             align: 'center',
+                            width:'160px',
                             render: (h, params) => {
                             return h('div', [
                                 h('Icon', {
@@ -93,6 +94,7 @@
                             title: '真实姓名',
                             key: 'realname',
                             align: 'center',
+                            width:'160px',
                             render: (h, params) => {
                             return h('div', [
                                 h('Icon', {
