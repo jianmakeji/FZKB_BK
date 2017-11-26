@@ -60,7 +60,7 @@
                       </template>
                       <Menu-item name="materialManage">灵感素材管理</Menu-item>
                       <Menu-item name="matchManage">搭配管理</Menu-item>
-                      <Menu-item name="designManage">设计师管理</Menu-item>
+                      <Menu-item name="designerManage">设计师管理</Menu-item>
                   </Submenu>
               </i-menu>
 
@@ -120,8 +120,8 @@
               else if (name == 'matchManage'){
                 this.$router.push('matchManage');
               }
-              else if (name == 'designManage'){
-                this.$router.push('designManage');
+              else if (name == 'designerManage'){
+                this.$router.push('designerManage');
               }
             }
         }

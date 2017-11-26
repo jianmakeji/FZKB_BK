@@ -23,11 +23,11 @@ const routers = [{
       },
       component: (resolve) => require(['./views/matchManage.vue'], resolve)
     },{
-      path: '/designManage',
+      path: '/designerManage',
       meta: {
           title: '服装设计师看板数据管理系统'
       },
-      component: (resolve) => require(['./views/designManage.vue'], resolve)
+      component: (resolve) => require(['./views/designerManage.vue'], resolve)
     },{
       path: '/addDesigner',
       meta: {
