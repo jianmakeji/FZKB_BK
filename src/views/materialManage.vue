@@ -149,9 +149,7 @@ export default {
                                   attrs:{
                                     src:params.row.pic
                                   },
-                                    domProps:{
-                                      src:params.row.pic
-                                    },
+                                  
                                     style: {
                                         width: '100px',
                                         height:'100px'
