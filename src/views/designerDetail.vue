@@ -16,7 +16,7 @@
       <hr style="height:1px;border:none;border-top:1px dashed #dddee1;"/>
       <div>
         <div style="display:inline-block;margin-left:10px;margin-top:15px;color:#495060">设计师名称</div>
-        <RadioGroup style="float:right;margin-right: 10px;margin-top:10px" v-model="typeChoice" type="button">
+        <RadioGroup style="float:right;margin-right: 10px;margin-top:10px" v-model="typeChoice" type="button" @on-change="radioChange">
             <Radio label="灵感素材"></Radio>
             <Radio label="搭配"></Radio>
         </RadioGroup>
@@ -149,8 +149,163 @@ import materialImage from '../resources/image/material-1.png'
                   }
 
               ],
-              typeChoice:'灵感素材'
+              typeChoice:'灵感素材',
             }
+        },
+        methods:{
+          radioChange(value){
+            if(value == '灵感素材'){
+
+            }
+            else if (value == '搭配'){
+              let matchColumns =  [
+                {
+                    title: '图片',
+                    key: 'pic',
+                    align: 'center',
+                    render: (h, params) => {
+                        return  h('img', {
+                                attrs: {
+                                  src: params.row.pic
+                                },
+                                style: {
+                                  width:'100px',
+                                  height:'100px'
+                                }
+                              })
+                    }
+                },
+                {
+                    title: '内搭素材',
+                    key: 'innerMaterial',
+                    align: 'center',
+                    render: (h, params) => {
+                        return  h('img', {
+                                attrs: {
+                                  src: params.row.innerMaterial
+                                },
+                                style: {
+                                  width:'100px',
+                                  height:'100px'
+                                }
+                              })
+                    }
+                },
+                {
+                    title: '外搭素材',
+                    key: 'outterMaterial',
+                    align: 'center',
+                    render: (h, params) => {
+                        return  h('img', {
+                                attrs: {
+                                  src: params.row.outterMaterial
+                                },
+                                style: {
+                                  width:'100px',
+                                  height:'100px'
+                                }
+                              })
+                    }
+                },
+                {
+                    title: '下装素材',
+                    key: 'underMaterial',
+                    align: 'center',
+                    render: (h, params) => {
+                        return  h('img', {
+                                attrs: {
+                                  src: params.row.underMaterial
+                                },
+                                style: {
+                                  width:'100px',
+                                  height:'100px'
+                                }
+                              })
+                    }
+                },
+                {
+                    title: '设计师',
+                    align: 'center',
+                    key: 'designer'
+                },
+                {
+                    title: '创建时间',
+                    align: 'center',
+                    key: 'createDate'
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 180,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+
+                            h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.show(params.index)
+                                    }
+                                }
+                            }, '查看')
+                        ]);
+                    }
+                }
+              ];
+              this.columns = matchColumns;
+
+              let matchData = [
+                {
+                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
+                    innerMaterial:materialImage,
+                    outterMaterial:materialImage,
+                    underMaterial:materialImage,
+                    designer:'2',
+                    createDate:'2017-11-22'
+                },
+                {
+                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
+                    innerMaterial:materialImage,
+                    outterMaterial:materialImage,
+                    underMaterial:materialImage,
+                    designer:'2',
+                    createDate:'2017-11-22'
+                },
+                {
+                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
+                    innerMaterial:materialImage,
+                    outterMaterial:materialImage,
+                    underMaterial:materialImage,
+                    designer:'2',
+                    createDate:'2017-11-22'
+                },
+                {
+                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
+                    innerMaterial:materialImage,
+                    outterMaterial:materialImage,
+                    underMaterial:materialImage,
+                    designer:'2',
+                    createDate:'2017-11-22'
+                },
+                {
+                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
+                    innerMaterial:materialImage,
+                    outterMaterial:materialImage,
+                    underMaterial:materialImage,
+                    designer:'2',
+                    createDate:'2017-11-22'
+                }
+              ];
+              this.data = matchData;
+            }
+          }
         }
     }
 </script>
