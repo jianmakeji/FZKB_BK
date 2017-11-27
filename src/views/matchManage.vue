@@ -137,6 +137,8 @@
 </template>
 <script>
 import $ from 'jquery'
+import materialImage from '../resources/image/material-1.png'
+
 export default {
         data () {
             return {
@@ -144,28 +146,75 @@ export default {
                     {
                         title: '图片',
                         key: 'pic',
+                        align: 'center',
                         render: (h, params) => {
-                            return h('<img src="'+params.row.pic+'" style="width:100px,height:100px"/>');
+                            return  h('img', {
+                                    attrs: {
+                                      src: params.row.pic
+                                    },
+                                    style: {
+                                      width:'100px',
+                                      height:'100px'
+                                    }
+                                  })
                         }
                     },
                     {
                         title: '内搭素材',
-                        key: 'innerMaterial'
+                        key: 'innerMaterial',
+                        align: 'center',
+                        render: (h, params) => {
+                            return  h('img', {
+                                    attrs: {
+                                      src: params.row.innerMaterial
+                                    },
+                                    style: {
+                                      width:'100px',
+                                      height:'100px'
+                                    }
+                                  })
+                        }
                     },
                     {
                         title: '外搭素材',
-                        key: 'outterMaterial'
+                        key: 'outterMaterial',
+                        align: 'center',
+                        render: (h, params) => {
+                            return  h('img', {
+                                    attrs: {
+                                      src: params.row.outterMaterial
+                                    },
+                                    style: {
+                                      width:'100px',
+                                      height:'100px'
+                                    }
+                                  })
+                        }
                     },
                     {
                         title: '下装素材',
-                        key: 'underMaterial'
+                        key: 'underMaterial',
+                        align: 'center',
+                        render: (h, params) => {
+                            return  h('img', {
+                                    attrs: {
+                                      src: params.row.underMaterial
+                                    },
+                                    style: {
+                                      width:'100px',
+                                      height:'100px'
+                                    }
+                                  })
+                        }
                     },
                     {
                         title: '设计师',
+                        align: 'center',
                         key: 'designer'
                     },
                     {
                         title: '创建时间',
+                        align: 'center',
                         key: 'createDate'
                     },
                     {
@@ -197,41 +246,41 @@ export default {
                 data: [
                     {
                         pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:'4-6',
-                        outterMaterial:'0.5',
-                        underMaterial:'0.5',
+                        innerMaterial:materialImage,
+                        outterMaterial:materialImage,
+                        underMaterial:materialImage,
                         designer:'2',
                         createDate:'2017-11-22'
                     },
                     {
                         pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:'4-6',
-                        outterMaterial:'0.5',
-                        underMaterial:'0.5',
+                        innerMaterial:materialImage,
+                        outterMaterial:materialImage,
+                        underMaterial:materialImage,
                         designer:'2',
                         createDate:'2017-11-22'
                     },
                     {
                         pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:'4-6',
-                        outterMaterial:'0.5',
-                        underMaterial:'0.5',
+                        innerMaterial:materialImage,
+                        outterMaterial:materialImage,
+                        underMaterial:materialImage,
                         designer:'2',
                         createDate:'2017-11-22'
                     },
                     {
                         pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:'4-6',
-                        outterMaterial:'0.5',
-                        underMaterial:'0.5',
+                        innerMaterial:materialImage,
+                        outterMaterial:materialImage,
+                        underMaterial:materialImage,
                         designer:'2',
                         createDate:'2017-11-22'
                     },
                     {
                         pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:'4-6',
-                        outterMaterial:'0.5',
-                        underMaterial:'0.5',
+                        innerMaterial:materialImage,
+                        outterMaterial:materialImage,
+                        underMaterial:materialImage,
                         designer:'2',
                         createDate:'2017-11-22'
                     }
