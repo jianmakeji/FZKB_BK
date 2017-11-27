@@ -136,6 +136,7 @@
 </template>
 <script>
 import $ from 'jquery'
+import materialImage from '../resources/image/material-1.png'
 export default {
         data () {
             return {
@@ -143,42 +144,47 @@ export default {
                     {
                         title: '图片',
                         key: 'pic',
+                        align: 'center',
                         render: (h, params) => {
-                            return
-                                h('img', {
-                                  attrs:{
-                                    src:params.row.pic
-                                  },
-                                  
+                            return  h('img', {
+                                    attrs: {
+                                      src: params.row.pic
+                                    },
                                     style: {
-                                        width: '100px',
-                                        height:'100px'
+                                      width:'100px',
+                                      height:'100px'
                                     }
-                                });
+                                  })
                         }
                     },
                     {
                         title: '类别',
+                        align: 'center',
                         key: 'category'
                     },
                     {
                         title: '编号',
+                        align: 'center',
                         key: 'number'
                     },
                     {
                         title: '简单-复杂',
+                        align: 'center',
                         key: 'style1'
                     },
                     {
                         title: '硬朗-圆润',
+                        align: 'center',
                         key: 'style2'
                     },
                     {
                         title: '冷酷-温暖',
+                        align: 'center',
                         key: 'style3'
                     },
                     {
                         title: '建档日期',
+                        align: 'center',
                         key: 'createDate'
                     },
                     {
@@ -234,7 +240,7 @@ export default {
                 ],
                 data: [
                     {
-                        pic: 'John Brown',
+                        pic: materialImage,
                         category:'植物',
                         number:'4-6',
                         style1:'0.5',
@@ -243,7 +249,7 @@ export default {
                         createDate:'2017-11-22'
                     },
                     {
-                        pic: 'John Brown',
+                        pic: materialImage,
                         category:'植物',
                         number:'4-6',
                         style1:'0.5',
@@ -252,7 +258,7 @@ export default {
                         createDate:'2017-11-22'
                     },
                     {
-                        pic: 'John Brown',
+                        pic: materialImage,
                         category:'植物',
                         number:'4-6',
                         style1:'0.5',
@@ -261,7 +267,7 @@ export default {
                         createDate:'2017-11-22'
                     },
                     {
-                        pic: 'John Brown',
+                        pic: materialImage,
                         category:'植物',
                         number:'4-6',
                         style1:'0.5',
@@ -270,52 +276,7 @@ export default {
                         createDate:'2017-11-22'
                     },
                     {
-                        pic: 'John Brown',
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'John Brown',
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'John Brown',
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'John Brown',
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'John Brown',
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'John Brown',
+                        pic: materialImage,
                         category:'植物',
                         number:'4-6',
                         style1:'0.5',
@@ -323,7 +284,6 @@ export default {
                         style3:'2',
                         createDate:'2017-11-22'
                     }
-
                 ],
                 value1: '1'
             }

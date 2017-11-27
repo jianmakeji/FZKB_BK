@@ -35,11 +35,11 @@ const routers = [{
       },
       component: (resolve) => require(['./views/addDesigner.vue'], resolve)
     },{
-      path: '/menu6',
+      path: '/designerDetail',
       meta: {
           title: '服装设计师看板数据管理系统'
       },
-      component: (resolve) => require(['./views/page6.vue'], resolve)
+      component: (resolve) => require(['./views/designerDetail.vue'], resolve)
     },{
       path: '/menu7',
       meta: {

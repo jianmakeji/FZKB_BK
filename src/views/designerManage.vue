@@ -209,10 +209,7 @@
             },
             methods: {
                 show (index) {
-                    this.$Modal.info({
-                        title: 'User Info',
-                        content: `Name：${this.data[index].name}<br>Age：${this.data[index].age}<br>Address：${this.data[index].address}`
-                    })
+                    this.$router.push('designerDetail');
                 },
                 update (index) {
 
@@ -223,8 +220,8 @@
                 ButtonClick(){
                   alert('Button click');
                 },
-                addMaterial(){
-                  this.$router.push('addMaterial');
+                addDesigner(){
+                  this.$router.push('addDesigner');
                 }
             }
         }
