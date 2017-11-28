@@ -253,6 +253,8 @@ import materialImage from '../resources/image/material-1.png'
 
               ],
               typeChoice:'灵感素材',
+              dataCount:300,
+              pageSize:10
             }
         },
         methods:{
