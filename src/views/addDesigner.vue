@@ -44,8 +44,8 @@
                   pwd: '',
                   realname: '',
                   textarea: ''
-                }
-            }
+              }
+          }
         }
     }
 </script>

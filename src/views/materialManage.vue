@@ -130,7 +130,7 @@
     </div>
     <div style="margin-top:10px">
         <Table border :columns="columns" :data="data"></Table>
-        <Page class="page" :total="100" show-elevator></Page>
+        <Page class="page" :total="dataCount" :page-size="pageSize" @on-change="pageChange" show-elevator></Page>
     </div>
   </div>
 </template>
@@ -285,7 +285,8 @@ export default {
                         createDate:'2017-11-22'
                     }
                 ],
-                value1: '1'
+                dataCount:300,
+                pageSize:10
             }
         },
         methods: {
@@ -306,7 +307,51 @@ export default {
             },
             addMaterial(){
               this.$router.push('addMaterial');
+            },
+            pageChange(pageNum){
+
+            },
+            loadMaterialData(pageSize,pageNum){
+              console.log(pageSize,pageNum);
+
+              let limit = pageSize;
+              let offset = pageSize * (pageNum - 1);
+              this.$Loading.start();
+              $.ajax({
+                type: 'POST',
+                url: 'url',
+                data: {limit: limit, offset:offset},
+                dataType: 'json',
+                success: function(result){
+                  this.$Loading.finish();
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown) {
+                  this.$Loading.error();
+                }
+
+              });
+            },
+            loadMatterialBySearchData(keyward,pageSize,pageNum){
+              let limit = pageSize;
+              let offset = pageSize * (pageNum - 1);
+              this.$Loading.start();
+              $.ajax({
+                type: 'POST',
+                url: 'url',
+                data: {limit: limit, offset:offset,keyward:keyward},
+                dataType: 'json',
+                success: function(result){
+                  this.$Loading.finish();
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown) {
+                  this.$Loading.error();
+                }
+
+              });
             }
+        },
+        created(){
+          //第一次加载初始化表格数据
         }
     }
 
