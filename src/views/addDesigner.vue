@@ -29,13 +29,14 @@
             <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="设计师简介..."></Input>
         </FormItem>
         <FormItem>
-            <Button type="primary">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">取消</Button>
+            <Button type="primary" @click="addDesigner">提交</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="cancelClick">取消</Button>
         </FormItem>
     </Form>
     </div>
 </template>
 <script>
+    import $ from 'jquery'
     export default {
         data () {
             return {
@@ -45,6 +46,27 @@
                   realname: '',
                   textarea: ''
               }
+          }
+        },
+        methods: {
+          addDesigner(){
+            this.$Loading.start();
+            $.ajax({
+              type: 'POST',
+              url: 'url',
+              data: {limit: limit, offset:offset,keyward:keyward},
+              dataType: 'json',
+              success: function(result){
+                this.$Loading.finish();
+              },
+              error:function (XMLHttpRequest, textStatus, errorThrown) {
+                this.$Loading.error();
+              }
+
+            });
+          },
+          cancelClick(){
+            this.$router.push('designerDetail');
           }
         }
     }
