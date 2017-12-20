@@ -46,6 +46,17 @@
   .layout-breadcrumb{
       padding: 10px 15px 10px;
   }
+
+  .tag{
+    width: 45px;
+    height: 25px;
+    line-height: 25px;
+    border: dashed 1px #c7c7ce;
+    display: inline-block;
+    margin: 8px;
+    text-align: center;
+    font-size: 12px;
+  }
 </style>
 <template>
     <div>
@@ -68,65 +79,25 @@
               筛选面板
           </p>
           <div id="conditionPanel">
-            <p class="tagSection">
+            <div class="tagSection">
               <Button type="text" class="conditionItem">种类：</Button>
-              <Button type="dashed" v-on:click="ButtonClick">艺术品</Button>
-              <Button type="dashed" >建筑</Button>
-              <Button type="dashed" >动物</Button>
-              <Button type="dashed" >植物</Button>
-              <Button type="dashed" >风景</Button>
-            </p>
-            <p class="tagSection">
+              <div class="tag" v-for="item in category" @click="TagClick" :id="0" name="categoryName">{{item}}</div>
+              </div>
+            <div class="tagSection">
               <Button type="text" class="conditionItem">简单-复杂：</Button>
-              <Button type="dashed" >-3</Button>
-              <Button type="dashed" >-2.5</Button>
-              <Button type="dashed" >-2</Button>
-              <Button type="dashed" >-1.5</Button>
-              <Button type="dashed" >-1</Button>
-              <Button type="dashed" >-0.5</Button>
-              <Button type="dashed" >0</Button>
-              <Button type="dashed" >0.5</Button>
-              <Button type="dashed" >1</Button>
-              <Button type="dashed" >1.5</Button>
-              <Button type="dashed" >2</Button>
-              <Button type="dashed" >2.5</Button>
-              <Button type="dashed" >3</Button>
-            </p>
+              <div class="tag" v-for="item in style1" @click="TagClick" :id="0" name="style1Name">{{item}}</div>
+            </div>
 
-            <p class="tagSection">
+            <div class="tagSection">
               <Button type="text" class="conditionItem">硬朗-圆润：</Button>
-              <Button type="dashed" >-3</Button>
-              <Button type="dashed" >-2.5</Button>
-              <Button type="dashed" >-2</Button>
-              <Button type="dashed" >-1.5</Button>
-              <Button type="dashed" >-1</Button>
-              <Button type="dashed" >-0.5</Button>
-              <Button type="dashed" >0</Button>
-              <Button type="dashed" >0.5</Button>
-              <Button type="dashed" >1</Button>
-              <Button type="dashed" >1.5</Button>
-              <Button type="dashed" >2</Button>
-              <Button type="dashed" >2.5</Button>
-              <Button type="dashed" >3</Button>
-            </p>
-            <p class="tagSection">
+              <div class="tag" v-for="item in style2" @click="TagClick" :id="0" name="style2Name">{{item}}</div>
+            </div>
+            <div class="tagSection">
               <Button type="text" class="conditionItem">冷酷-温暖：</Button>
-              <Button type="dashed" >-3</Button>
-              <Button type="dashed" >-2.5</Button>
-              <Button type="dashed" >-2</Button>
-              <Button type="dashed" >-1.5</Button>
-              <Button type="dashed" >-1</Button>
-              <Button type="dashed" >-0.5</Button>
-              <Button type="dashed" >0</Button>
-              <Button type="dashed" >0.5</Button>
-              <Button type="dashed" >1</Button>
-              <Button type="dashed" >1.5</Button>
-              <Button type="dashed" >2</Button>
-              <Button type="dashed" >2.5</Button>
-              <Button type="dashed" >3</Button>
-            </p>
+              <div class="tag" v-for="item in style3" @click="TagClick" :id="0" name="style3Name">{{item}}</div>
+            </div>
           </div>
-          <div style="text-align:center;margin-top:10px" id="arrowArea"><Icon id="arrowIcon" type="chevron-up"></Icon></div>
+          <div style="text-align:center;margin-top:30px" id="arrowArea" @click="arrowAreaClick"><Icon id="arrowIcon" type="chevron-up"></Icon></div>
         </Card>
       </div>
       <div style="margin-top:10px">
@@ -138,6 +109,11 @@
 <script>
 import $ from 'jquery'
 import materialImage from '../resources/image/material-1.png'
+var collapse = 1;
+var categoryCondition = "";
+var style1Condition = "";
+var style2Condition = "";
+var style3Condition = "";
 
 export default {
         data () {
@@ -285,6 +261,10 @@ export default {
                         createDate:'2017-11-22'
                     }
                 ],
+                category:['艺术品','建筑','动物','植物','风景'],
+                style1:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
+                style2:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
+                style3:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
                 dataCount:300,
                 pageSize:10
             }
@@ -302,8 +282,47 @@ export default {
             remove (index) {
                 this.data.splice(index, 1);
             },
-            ButtonClick(){
-              alert('Button click');
+            TagClick(event){
+              var tagValue = $(event.currentTarget).text();
+              var categoryName = $(event.currentTarget).attr('name');
+              var id = $(event.currentTarget).attr('id');
+
+              if (id == 0){
+                $(event.currentTarget).css({'background-color':'#2d8cf0','color':'white'});
+                $(event.currentTarget).attr('id','1');
+                if(categoryName == 'categoryName'){
+                  categoryCondition = categoryCondition + tagValue + ",";
+                }
+                else if (categoryName == 'style1Name') {
+                  style1Condition = style1Condition + tagValue + ",";
+                }
+                else if (categoryName == 'style2Name') {
+                  style2Condition = style2Condition + tagValue + ",";
+                }
+                else if (categoryName == 'style3Name') {
+                  style3Condition = style3Condition + tagValue + ",";
+                }
+              }
+              else{
+                $(event.currentTarget).css({'background-color':'#FFFFFF','color':'#495060'});
+                $(event.currentTarget).attr('id','0');
+                if(categoryName == 'categoryName'){
+                  categoryCondition = categoryCondition.split(tagValue + ",").join("");
+                }
+                else if (categoryName == 'style1Name') {
+                  style1Condition = style1Condition.split(tagValue + ",").join("");
+                }
+                else if (categoryName == 'style2Name') {
+                  style2Condition = style2Condition.split(tagValue + ",").join("");
+                }
+                else if (categoryName == 'style3Name') {
+                  style3Condition = style3Condition.split(tagValue + ",").join("");
+                }
+              }
+              console.log(categoryCondition);
+              console.log(style1Condition);
+              console.log(style2Condition);
+              console.log(style3Condition);
             },
             addMaterial(){
               this.$router.push('addMaterial');
@@ -315,7 +334,6 @@ export default {
             },
 
             loadMatchData(pageSize,pageNum){
-              console.log(pageSize,pageNum);
 
               let limit = pageSize;
               let offset = pageSize * (pageNum - 1);
@@ -351,39 +369,37 @@ export default {
                 }
 
               });
+            },
+            arrowAreaClick(){
+              if (collapse == 1){
+                $("#conditionPanel").animate({
+                  height:'5px'
+                }, function() {
+                  $("#conditionPanel").hide();
+                });
+                $("#arrowIcon").removeClass("ivu-icon-chevron-up");
+                $("#arrowIcon").addClass("ivu-icon-chevron-down");
+                collapse = 0;
+              }
+              else{
+                $("#conditionPanel").show();
+                $("#conditionPanel").animate({
+                  height:'150px'
+                });
+                $("#arrowIcon").removeClass("ivu-icon-chevron-down");
+                $("#arrowIcon").addClass("ivu-icon-chevron-up");
+                collapse = 1;
+              }
             }
         },
         created(){
           //第一次加载初始化表格数据
-          console.log("pageSize:"+this.pageSize);
-          console.log("dataCount:"+this.dataCount);
+          categoryCondition = "";
+          style1Condition = "";
+          style2Condition = "";
+          style3Condition = "";
           //this.loadMatchData(10,12);
         }
 
     }
-
-    $(document).ready(function(){
-      var collapse = 1;
-      $("#arrowArea").click(function(){
-        if (collapse == 1){
-          $("#conditionPanel").animate({
-            height:'5px'
-          }, function() {
-            $("#conditionPanel").hide();
-          });
-          $("#arrowIcon").removeClass("ivu-icon-chevron-up");
-          $("#arrowIcon").addClass("ivu-icon-chevron-down");
-          collapse = 0;
-        }
-        else{
-          $("#conditionPanel").show();
-          $("#conditionPanel").animate({
-            height:'150px'
-          });
-          $("#arrowIcon").removeClass("ivu-icon-chevron-down");
-          $("#arrowIcon").addClass("ivu-icon-chevron-up");
-          collapse = 1;
-        }
-      });
-    });
 </script>

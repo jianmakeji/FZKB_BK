@@ -29,13 +29,14 @@
             <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="设计师简介..."></Input>
         </FormItem>
         <FormItem>
-            <Button type="primary">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">取消</Button>
+            <Button type="primary" @click="addDesigner">提交</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="cancelClick">取消</Button>
         </FormItem>
     </Form>
     </div>
 </template>
 <script>
+    import $ from 'jquery'
     export default {
         data () {
             return {
@@ -45,6 +46,51 @@
                   realname: '',
                   textarea: ''
               }
+          }
+        },
+        methods: {
+          addDesigner(){
+            this.$Loading.start();
+            util.ajax.post('/match/createMatch', {
+              name:this.formItem.name,
+              number: this.formItem.number,
+              categoryName:this.formItem.categoryName,
+              style1:this.formItem.select1,
+              style2:this.formItem.select2,
+              style3:this.formItem.select3,
+              thumb:this.formItem.thumb,
+              masterImage:this.formItem.masterImage
+            },{headers: {"Content-Type": "application/json"}})
+            .then(function (response) {
+              if(response.data.resultCode == 200){
+                message.success('添加成功！');
+              }
+              else{
+                message.error(response.data.message);
+              }
+              loadingComponent.finish();
+            })
+            .catch(function (response) {
+              loadingComponent.error();
+              message.error('操作失败!');
+            });
+
+            $.ajax({
+              type: 'POST',
+              url: 'url',
+              data: {limit: limit, offset:offset,keyward:keyward},
+              dataType: 'json',
+              success: function(result){
+                this.$Loading.finish();
+              },
+              error:function (XMLHttpRequest, textStatus, errorThrown) {
+                this.$Loading.error();
+              }
+
+            });
+          },
+          cancelClick(){
+            this.$router.push('designerDetail');
           }
         }
     }
