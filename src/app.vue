@@ -144,13 +144,13 @@ import $ from 'jquery'
             },
             menuClick(name){
               if (name == 'materialManage'){
-                this.$router.push('materialManage');
+                this.$router.push('../materialManage');
               }
               else if (name == 'matchManage'){
-                this.$router.push('matchManage');
+                this.$router.push('../matchManage');
               }
               else if (name == 'designerManage'){
-                this.$router.push('designerManage');
+                this.$router.push('../designerManage');
               }
             },
             ok(){

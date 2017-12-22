@@ -103,11 +103,14 @@
         <Table border :columns="columns" :data="data"></Table>
         <Page class="page" :total="dataCount" :page-size="pageSize" @on-change="pageChange" show-elevator></Page>
     </div>
+    <Spin size="large" fix v-if="spinVisible"></Spin>
   </div>
 </template>
 <script>
 import $ from 'jquery'
 import materialImage from '../resources/image/material-1.png'
+import util from '../libs/util';
+
 var collapse = 1;
 var categoryCondition = "";
 var style1Condition = "";
@@ -124,7 +127,7 @@ export default {
                         render: (h, params) => {
                             return  h('img', {
                                     attrs: {
-                                      src: params.row.pic
+                                      src: params.row.thumb+"?x-oss-process=style/thumb-150"
                                     },
                                     style: {
                                       width:'100px',
@@ -136,7 +139,7 @@ export default {
                     {
                         title: '类别',
                         align: 'center',
-                        key: 'category'
+                        key: 'categoryName'
                     },
                     {
                         title: '编号',
@@ -161,7 +164,7 @@ export default {
                     {
                         title: '建档日期',
                         align: 'center',
-                        key: 'createDate'
+                        key: 'createTime'
                     },
                     {
                         title: '操作',
@@ -170,21 +173,6 @@ export default {
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
-
-                                h('Button', {
-                                    props: {
-                                        type: 'info',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '查看'),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
@@ -195,7 +183,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.update(params.index)
+                                            this.$router.push('addMaterial/'+params.row.id);
                                         }
                                     }
                                 }, '修改'),
@@ -206,7 +194,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.remove(params.row.id);
                                         }
                                     }
                                 }, '删除')
@@ -215,72 +203,41 @@ export default {
                     }
                 ],
                 data: [
-                    {
-                        pic: materialImage,
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: materialImage,
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: materialImage,
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: materialImage,
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: materialImage,
-                        category:'植物',
-                        number:'4-6',
-                        style1:'0.5',
-                        style2:'0.5',
-                        style3:'2',
-                        createDate:'2017-11-22'
-                    }
+
                 ],
                 category:['艺术品','建筑','动物','植物','风景'],
                 style1:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
                 style2:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
                 style3:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
-                dataCount:300,
-                pageSize:10
+                dataCount:0,
+                pageSize:10,
+                spinVisible:false,
+                currentPage:0,
             }
         },
         methods: {
-            show (index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.data[index].name}<br>Age：${this.data[index].age}<br>Address：${this.data[index].address}`
-                })
-            },
-            update (index) {
-
-            },
             remove (index) {
-                this.data.splice(index, 1);
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              util.ajax.get('/material/deleteMaterial/', {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      if (response.data.success == true) {
+                        message.success("操作成功！");
+                        that.loadMaterialByPage(this.pageSize,(currentPage - 1)*this.pageSize);
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
+                  });
             },
             TagClick(event){
               var tagValue = $(event.currentTarget).text();
@@ -319,54 +276,73 @@ export default {
                   style3Condition = style3Condition.split(tagValue + ",").join("");
                 }
               }
-              console.log(categoryCondition);
-              console.log(style1Condition);
-              console.log(style2Condition);
-              console.log(style3Condition);
             },
             addMaterial(){
               this.$router.push('addMaterial');
             },
             pageChange(pageNum){
-
+              this.currentPage = pageNum;
+              this.loadMaterialByPage(this.pageSize,(pageNum - 1)*this.pageSize);
             },
-            loadMaterialData(pageSize,pageNum){
-              console.log(pageSize,pageNum);
+            loadMaterialByPage(limit,offset){
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              util.ajax.get('/material/getDataByPage', {
+                      params:{
+                        limit: limit,
+                        offset: offset,
+                      }
+                  }, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      console.log(response.data.success);
+                      if (response.data.success == true) {
+                        that.data = response.data.aaData;
+                        that.dataCount = response.data.iTotalRecords;
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
 
-              let limit = pageSize;
-              let offset = pageSize * (pageNum - 1);
-              this.$Loading.start();
-              $.ajax({
-                type: 'POST',
-                url: 'url',
-                data: {limit: limit, offset:offset},
-                dataType: 'json',
-                success: function(result){
-                  this.$Loading.finish();
-                },
-                error:function (XMLHttpRequest, textStatus, errorThrown) {
-                  this.$Loading.error();
-                }
-
-              });
+                  });
             },
-            loadMatterialBySearchData(keyward,pageSize,pageNum){
-              let limit = pageSize;
-              let offset = pageSize * (pageNum - 1);
-              this.$Loading.start();
-              $.ajax({
-                type: 'POST',
-                url: 'url',
-                data: {limit: limit, offset:offset,keyward:keyward},
-                dataType: 'json',
-                success: function(result){
-                  this.$Loading.finish();
-                },
-                error:function (XMLHttpRequest, textStatus, errorThrown) {
-                  this.$Loading.error();
-                }
-
-              });
+            loadMatterialBySearchData(number,pageNum){
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              this.currentPage = pageNum;
+              util.ajax.get('/material/getDataPageByNumber', {
+                      params:{
+                        limit: that.pageSize,
+                        offset: that.pageSize * (pageNum - 1),
+                        number:number
+                      }
+                  }, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      if (response.data.success == true) {
+                        that.data = response.data.aaData;
+                        that.dataCount = response.data.iTotalRecords;
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
+                  });
             },
             arrowAreaClick(){
               if (collapse == 1){
@@ -388,14 +364,16 @@ export default {
                 $("#arrowIcon").addClass("ivu-icon-chevron-up");
                 collapse = 1;
               }
-            }
+            },
         },
         created(){
             categoryCondition = "";
             style1Condition = "";
             style2Condition = "";
             style3Condition = "";
-          //第一次加载初始化表格数据
+            //第一次加载初始化表格数据
+            this.currentPage = 1;
+            this.loadMaterialByPage(10,0);
         }
     }
 

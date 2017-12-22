@@ -17,6 +17,12 @@ const routers = [{
       },
       component: (resolve) => require(['./views/addMaterial.vue'], resolve)
     },{
+      path: '/addMaterial/:id',
+      meta: {
+          title: '服装设计师看板数据管理系统'
+      },
+      component: (resolve) => require(['./views/addMaterial.vue'], resolve)
+    },{
       path: '/matchManage',
       meta: {
           title: '服装设计师看板数据管理系统'

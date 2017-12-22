@@ -39,10 +39,16 @@
 
         <FormItem label="图片上传" class="addImage">
             <Tooltip content="请上传JPG/PNG格式,推荐512x512" placement="right">
-                <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload">
-                    <div style="padding: 20px 0">
-                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                        <p>点击或者将图片拖拽到这里</p>
+                <Upload ref="upload" multiple type="drag" :action="host" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" :data="{
+                  		'key': g_object_name,
+                  		'policy': policyBase64,
+                  		'OSSAccessKeyId': accessid,
+                  		'success_action_status': '200',
+                  		'callback': callbackbody,
+                  		'signature': signature,
+                  	}" :show-upload-list="false">
+                    <div style="width:200px;height:200px">
+                        <img :src="formItem.thumb" style="width: 100%">
                     </div>
                 </Upload>
             </Tooltip>
@@ -113,6 +119,7 @@
             <Button type="ghost" style="margin-left: 8px" @click="cancelClick">取消</Button>
         </FormItem>
     </Form>
+    <Spin size="large" fix v-if="spinVisible"></Spin>
 </div>
 
 </template>
@@ -120,38 +127,90 @@
 <script>
 
 import util from '../libs/util';
+import $ from 'jquery'
+import uploadImage from '../resources/image/upload.png'
+
+var g_object_name = "";
+var key = '';
+var hostPrefix = "http://sdx-kt.oss-cn-shanghai.aliyuncs.com/";
+
+function random_string(len) {
+    var len = len || 32;
+    var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    var maxPos = chars.length;
+    var pwd = '';
+    for (var i = 0; i < len; i++) {
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
+
+function get_suffix(filename) {
+    var pos = filename.lastIndexOf('.')
+    var suffix = ''
+    if (pos != -1) {
+        suffix = filename.substring(pos)
+    }
+    return suffix;
+}
+
+function calculate_object_name(filename) {
+
+    var suffix = get_suffix(filename)
+    g_object_name = key + random_string(10) + suffix
+
+}
+
+function get_uploaded_object_name(filename) {
+    return g_object_name;
+}
 
 export default {
     data() {
             return {
                 formItem: {
                     name: '',
-                    number: '1111',
+                    number: '',
                     categoryName: '',
                     select1: '',
                     select2: '',
                     select3: '',
-                    thumb: 'http',
-                    masterImage: 'http'
-                }
+                    thumb: '',
+                    imageUrl: ''
+                },
+                g_object_name: '',
+                policyBase64: '',
+                accessid: '',
+                callbackbody: '',
+                signature: '',
+                host: hostPrefix,
+                spinVisible:false,
+                id:0,
+                insertOrUpdate:true
             }
         },
         methods: {
             addMaterial() {
                     let loadingComponent = this.$Loading;
                     let message = this.$Message;
-
                     loadingComponent.start();
-                    util.ajax.post('/material/createMaterial', {
-                            name: this.formItem.name,
-                            number: this.formItem.number,
-                            categoryName: this.formItem.categoryName,
-                            style1: this.formItem.select1,
-                            style2: this.formItem.select2,
-                            style3: this.formItem.select3,
-                            thumb: this.formItem.thumb,
-                            masterImage: this.formItem.masterImage
-                        }, {
+                    var postUrl = "";
+                    var postData = {
+                      name: this.formItem.name,
+                      number: this.formItem.number,
+                      categoryName: this.formItem.categoryName,
+                      style1: this.formItem.select1,
+                      style2: this.formItem.select2,
+                      style3: this.formItem.select3,
+                      imageUrl: this.formItem.imageUrl
+                    };
+                    if (this.insertOrUpdate){
+                        postUrl = "/material/createMaterial";
+                    }else{
+                        postUrl = "/material/updateMaterial";
+                        postData.id = this.id;
+                    }
+                    util.ajax.post(postUrl, postData, {
                             headers: {
                                 "Content-Type": "application/json"
                             }
@@ -173,31 +232,82 @@ export default {
                 cancelClick() {
                     this.$router.push('materialManage');
                 },
+                handleView(name) {
+                    this.visible = true;
+                },
                 handleSuccess(res, file) {
-                    file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-                    file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+                    this.formItem.thumb = hostPrefix + g_object_name + "?x-oss-process=style/thumb-300";
+                    this.formItem.imageUrl = hostPrefix + g_object_name;
                 },
                 handleFormatError(file) {
-                    this.$Notice.warning({
-                        title: 'The file format is incorrect',
-                        desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
-                    });
+                    this.$Message.error("文件格式错误！");
                 },
                 handleMaxSize(file) {
-                    this.$Notice.warning({
-                        title: 'Exceeding file size limit',
-                        desc: 'File  ' + file.name + ' is too large, no more than 2M.'
-                    });
+                    this.$Message.error("文件不能超过2M！");
                 },
-                handleBeforeUpload() {
-                    const check = this.uploadList.length < 5;
-                    if (!check) {
-                        this.$Notice.warning({
-                            title: 'Up to five pictures can be uploaded.'
-                        });
-                    }
-                    return check;
+                handleBeforeUpload(file) {
+                    let message = this.$Message;
+                    var self = this;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '/api/uploadKey/1',
+                        async: false,
+                        dataType: 'json',
+                        success: function(result) {
+                            self.$refs.upload.data.host = result.host;
+                            self.$refs.upload.data.policy = result.policy;
+                            self.$refs.upload.data.OSSAccessKeyId = result.accessid;
+                            self.$refs.upload.data.signature = result.signature;
+                            self.$refs.upload.data.callback = '';
+                            key = result.dir;
+                            g_object_name = result.dir;
+                            calculate_object_name(file.name)
+                            self.$refs.upload.data.key = g_object_name;
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            message.error(errorThrown);
+                        }
+                    });
                 }
+        },
+        created(){
+           this.spinVisible = true;
+           var id = this.$route.params.id;
+           let that = this;
+           if (id){
+             this.insertOrUpdate = false;
+             let message = this.$Message;
+             this.id = id;
+             util.ajax.get('/material/getMaterial/'+id, {
+                     headers: {
+                         "Content-Type": "application/json"
+                     }
+                 })
+                 .then(function(response) {
+                     if (response.data.resultCode == 200) {
+                       that.formItem.name = response.data.object.name,
+                       that.formItem.number: response.data.object.number,
+                       that.formItem.categoryName: response.data.object.categoryName,
+                       that.formItem.select1: response.data.object.select1,
+                       that.formItem.select2: response.data.object.select2,
+                       that.formItem.select3: response.data.object.select3,
+                       that.formItem.thumb: response.data.object.imageUrl + "?x-oss-process=style/thumb-300",
+                       that.formItem.imageUrl: response.data.object.imageUrl
+                     } else {
+                         message.error(response.data.message);
+                     }
+                     this.spinVisible = false;
+                 })
+                 .catch(function(response) {
+                     message.error('操作失败!');
+                     this.spinVisible = false;
+                 });
+           }
+           else{
+             this.spinVisible = false;
+             this.insertOrUpdate = true;
+           }
         }
 }
 
