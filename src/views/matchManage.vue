@@ -104,11 +104,14 @@
           <Table border :columns="columns" :data="data"></Table>
           <Page class="page" :total="dataCount" :page-size="pageSize" show-elevator @on-change="pageChange"></Page>
       </div>
+      <Spin size="large" fix v-if="spinVisible"></Spin>
     </div>
 </template>
 <script>
-import $ from 'jquery'
-import materialImage from '../resources/image/material-1.png'
+import $ from 'jquery';
+import materialImage from '../resources/image/material-1.png';
+import util from '../libs/util';
+
 var collapse = 1;
 var categoryCondition = "";
 var style1Condition = "";
@@ -126,7 +129,7 @@ export default {
                         render: (h, params) => {
                             return  h('img', {
                                     attrs: {
-                                      src: params.row.pic
+                                      src: materialImage
                                     },
                                     style: {
                                       width:'100px',
@@ -137,12 +140,12 @@ export default {
                     },
                     {
                         title: '内搭素材',
-                        key: 'innerMaterial',
+                        key: 'underwear',
                         align: 'center',
                         render: (h, params) => {
                             return  h('img', {
                                     attrs: {
-                                      src: params.row.innerMaterial
+                                      src: params.row.underwear
                                     },
                                     style: {
                                       width:'100px',
@@ -153,12 +156,12 @@ export default {
                     },
                     {
                         title: '外搭素材',
-                        key: 'outterMaterial',
+                        key: 'greatcoat',
                         align: 'center',
                         render: (h, params) => {
                             return  h('img', {
                                     attrs: {
-                                      src: params.row.outterMaterial
+                                      src: params.row.greatcoat
                                     },
                                     style: {
                                       width:'100px',
@@ -169,12 +172,12 @@ export default {
                     },
                     {
                         title: '下装素材',
-                        key: 'underMaterial',
+                        key: 'trousers',
                         align: 'center',
                         render: (h, params) => {
                             return  h('img', {
                                     attrs: {
-                                      src: params.row.underMaterial
+                                      src: params.row.trousers
                                     },
                                     style: {
                                       width:'100px',
@@ -186,12 +189,12 @@ export default {
                     {
                         title: '设计师',
                         align: 'center',
-                        key: 'designer'
+                        key: 'username'
                     },
                     {
                         title: '创建时间',
                         align: 'center',
-                        key: 'createDate'
+                        key: 'createTime'
                     },
                     {
                         title: '操作',
@@ -211,76 +214,64 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.index)
+                                            this.show(params.row.uwId,params.row.gcId,params.row.trId);
                                         }
                                     }
-                                }, '查看')
+                                }, '查看'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.remove(params.row.id);
+                                        }
+                                    }
+                                }, '删除')
                             ]);
                         }
                     }
                 ],
                 data: [
-                    {
-                        pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:materialImage,
-                        outterMaterial:materialImage,
-                        underMaterial:materialImage,
-                        designer:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:materialImage,
-                        outterMaterial:materialImage,
-                        underMaterial:materialImage,
-                        designer:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:materialImage,
-                        outterMaterial:materialImage,
-                        underMaterial:materialImage,
-                        designer:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:materialImage,
-                        outterMaterial:materialImage,
-                        underMaterial:materialImage,
-                        designer:'2',
-                        createDate:'2017-11-22'
-                    },
-                    {
-                        pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                        innerMaterial:materialImage,
-                        outterMaterial:materialImage,
-                        underMaterial:materialImage,
-                        designer:'2',
-                        createDate:'2017-11-22'
-                    }
+
                 ],
                 category:['艺术品','建筑','动物','植物','风景'],
                 style1:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
                 style2:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
                 style3:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
-                dataCount:300,
-                pageSize:10
+                dataCount:0,
+                pageSize:10,
+                spinVisible:false,
+                currentPage:0,
             }
         },
         methods: {
-            show (index) {
-                this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.data[index].name}<br>Age：${this.data[index].age}<br>Address：${this.data[index].address}`
-                })
-            },
-            update (index) {
+            show(uwId,gcId,trId){
 
             },
             remove (index) {
-                this.data.splice(index, 1);
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              util.ajax.get('/match/deleteMatch/'+index, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      if (response.data.success == true) {
+                        message.success("操作成功！");
+                        that.loadMatchData(this.pageSize,(currentPage - 1)*this.pageSize);
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
+                  });
             },
             TagClick(event){
               var tagValue = $(event.currentTarget).text();
@@ -319,56 +310,43 @@ export default {
                   style3Condition = style3Condition.split(tagValue + ",").join("");
                 }
               }
-              console.log(categoryCondition);
-              console.log(style1Condition);
-              console.log(style2Condition);
-              console.log(style3Condition);
             },
             addMaterial(){
               this.$router.push('addMaterial');
             },
             pageChange(pageNum){
-              console.log(pageNum);
-              //this.$options.methods.loadMatchData(10,1);
-              //this.loadMatchData(10,2);
+              this.currentPage = pageNum;
+              this.loadMatchData(this.pageSize,(pageNum - 1)*this.pageSize);
             },
 
-            loadMatchData(pageSize,pageNum){
+            loadMatchData(limit,offset){
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              util.ajax.get('/match/getDataByPage', {
+                      params:{
+                        limit: limit,
+                        offset: offset,
+                      }
+                  }, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      if (response.data.success == true) {
+                        that.data = response.data.aaData;
+                        that.dataCount = response.data.iTotalRecords;
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
 
-              let limit = pageSize;
-              let offset = pageSize * (pageNum - 1);
-              this.$Loading.start();
-              $.ajax({
-                type: 'POST',
-                url: 'url',
-                data: {limit: limit, offset:offset},
-                dataType: 'json',
-                success: function(result){
-                  this.$Loading.finish();
-                },
-                error:function (XMLHttpRequest, textStatus, errorThrown) {
-                  this.$Loading.error();
-                }
-
-              });
-            },
-            loadMatchBySearchData(keyward,pageSize,pageNum){
-              let limit = pageSize;
-              let offset = pageSize * (pageNum - 1);
-              this.$Loading.start();
-              $.ajax({
-                type: 'POST',
-                url: 'url',
-                data: {limit: limit, offset:offset,keyward:keyward},
-                dataType: 'json',
-                success: function(result){
-                  this.$Loading.finish();
-                },
-                error:function (XMLHttpRequest, textStatus, errorThrown) {
-                  this.$Loading.error();
-                }
-
-              });
+                  });
             },
             arrowAreaClick(){
               if (collapse == 1){
@@ -398,7 +376,8 @@ export default {
           style1Condition = "";
           style2Condition = "";
           style3Condition = "";
-          //this.loadMatchData(10,12);
+          this.currentPage = 1;
+          this.loadMatchData(this.pageSize,0);
         }
 
     }

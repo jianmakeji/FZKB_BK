@@ -286,14 +286,14 @@ export default {
                  })
                  .then(function(response) {
                      if (response.data.resultCode == 200) {
-                       that.formItem.name = response.data.object.name,
-                       that.formItem.number: response.data.object.number,
-                       that.formItem.categoryName: response.data.object.categoryName,
-                       that.formItem.select1: response.data.object.select1,
-                       that.formItem.select2: response.data.object.select2,
-                       that.formItem.select3: response.data.object.select3,
-                       that.formItem.thumb: response.data.object.imageUrl + "?x-oss-process=style/thumb-300",
-                       that.formItem.imageUrl: response.data.object.imageUrl
+                       that.formItem.name = response.data.object.name;
+                       that.formItem.number = response.data.object.number;
+                       that.formItem.categoryName = response.data.object.categoryName;
+                       that.formItem.select1 = response.data.object.select1;
+                       that.formItem.select2 = response.data.object.select2;
+                       that.formItem.select3 = response.data.object.select3;
+                       that.formItem.thumb = response.data.object.imageUrl + "?x-oss-process=style/thumb-300";
+                       that.formItem.imageUrl = response.data.object.imageUrl;
                      } else {
                          message.error(response.data.message);
                      }

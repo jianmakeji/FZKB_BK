@@ -66,10 +66,12 @@
           <Table border :columns="columns" :data="data"></Table>
           <Page class="page" :total="dataCount" :page-size="pageSize" @on-change="pageChange" show-elevator></Page>
       </div>
+      <Spin size="large" fix v-if="spinVisible"></Spin>
     </div>
 </template>
 <script>
     import $ from 'jquery'
+    import util from '../libs/util';
     export default {
             data () {
                 return {
@@ -108,7 +110,7 @@
                         },
                         {
                             title: '描述',
-                            key: 'describtion',
+                            key: 'introduce',
                             align: 'center'
                         },
                         {
@@ -129,7 +131,7 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.show(params.index)
+                                                this.show(params.row.id)
                                             }
                                         }
                                     }, '查看'),
@@ -143,7 +145,7 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.update(params.index)
+                                                this.$router.push('addDesigner/'+params.row.id);
                                             }
                                         }
                                     }, '修改'),
@@ -154,7 +156,7 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.remove(params.index)
+                                                this.remove(params.row.id)
                                             }
                                         }
                                     }, '删除')
@@ -163,112 +165,110 @@
                         }
                     ],
                     data: [
-                        {
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        },{
-                            username: 'cidic',
-                            realname:'中意工业设计（湖南）有限责任公司',
-                            describtion:'习近平新时代中国特色社会主义思想'
-                        }
+
                     ],
-                    dataCount:300,
-                    pageSize:10
+                    dataCount:0,
+                    pageSize:10,
+                    spinVisible:false,
+                    currentPage:0,
                 }
             },
             methods: {
                 show (index) {
                     this.$router.push('designerDetail');
                 },
-                update (index) {
-
-                },
                 remove (index) {
-                    this.data.splice(index, 1);
-                },
-                ButtonClick(){
-                  alert('Button click');
+                  this.spinVisible = true;
+                  let that = this;
+                  let message = this.$Message;
+                  util.ajax.get('/designer/deleteDesigner/'+index, {
+                          headers: {
+                              "Content-Type": "application/json"
+                          }
+                      })
+                      .then(function(response) {
+                          if (response.data.success == true) {
+                            message.success("操作成功！");
+                            that.loadMaterialByPage(this.pageSize,(currentPage - 1)*this.pageSize);
+                          } else {
+                            message.error(response.data.message);
+                          }
+                          that.spinVisible = false;
+                      })
+                      .catch(function(response) {
+                          that.spinVisible = false;
+                          message.error('获取数据操作失败!');
+                      });
                 },
                 addDesigner(){
                   this.$router.push('addDesigner');
                 },
                 pageChange(pageNum){
-
+                  this.currentPage = pageNum;
+                  this.loadMaterialByPage(this.pageSize,(pageNum - 1)*this.pageSize);
                 },
-                loadDesignerData(pageSize,pageNum){
-                  console.log(pageSize,pageNum);
-
-                  let limit = pageSize;
-                  let offset = pageSize * (pageNum - 1);
-                  this.$Loading.start();
-                  $.ajax({
-                    type: 'POST',
-                    url: 'url',
-                    data: {limit: limit, offset:offset},
-                    dataType: 'json',
-                    success: function(result){
-                      this.$Loading.finish();
-                    },
-                    error:function (XMLHttpRequest, textStatus, errorThrown) {
-                      this.$Loading.error();
-                    }
-
-                  });
+                loadDesignerData(limit,offset){
+                  this.spinVisible = true;
+                  let that = this;
+                  let message = this.$Message;
+                  util.ajax.get('/designer/getDataByPage', {
+                          params:{
+                            limit: limit,
+                            offset: offset,
+                          }
+                      }, {
+                          headers: {
+                              "Content-Type": "application/json"
+                          }
+                      })
+                      .then(function(response) {
+                          if (response.data.success == true) {
+                            that.data = response.data.aaData;
+                            that.dataCount = response.data.iTotalRecords;
+                          } else {
+                            message.error(response.data.message);
+                          }
+                          that.spinVisible = false;
+                      })
+                      .catch(function(response) {
+                          that.spinVisible = false;
+                          message.error('获取数据操作失败!');
+                      });
                 },
-                loadDesignerBySearchData(keyward,pageSize,pageNum){
-                  let limit = pageSize;
-                  let offset = pageSize * (pageNum - 1);
-                  this.$Loading.start();
-                  $.ajax({
-                    type: 'POST',
-                    url: 'url',
-                    data: {limit: limit, offset:offset,keyward:keyward},
-                    dataType: 'json',
-                    success: function(result){
-                      this.$Loading.finish();
-                    },
-                    error:function (XMLHttpRequest, textStatus, errorThrown) {
-                      this.$Loading.error();
-                    }
-
-                  });
+                loadDesignerBySearchData(realname,pageSize,pageNum){
+                  this.spinVisible = true;
+                  let that = this;
+                  let message = this.$Message;
+                  this.currentPage = pageNum;
+                  util.ajax.get('/designer/getDesignerByRealname', {
+                          params:{
+                            limit: that.pageSize,
+                            offset: that.pageSize * (pageNum - 1),
+                            realname:realname
+                          }
+                      }, {
+                          headers: {
+                              "Content-Type": "application/json"
+                          }
+                      })
+                      .then(function(response) {
+                          if (response.data.success == true) {
+                            that.data = response.data.aaData;
+                            that.dataCount = response.data.iTotalRecords;
+                          } else {
+                            message.error(response.data.message);
+                          }
+                          that.spinVisible = false;
+                      })
+                      .catch(function(response) {
+                          that.spinVisible = false;
+                          message.error('获取数据操作失败!');
+                      });
                 }
             },
             created(){
-              //第一次加载初始化表格数据
+              this.currentPage = 1;
+              this.loadMaterialByPage(10,0);
             }
         }
 </script>

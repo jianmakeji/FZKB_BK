@@ -127,7 +127,7 @@ export default {
                         render: (h, params) => {
                             return  h('img', {
                                     attrs: {
-                                      src: params.row.thumb+"?x-oss-process=style/thumb-150"
+                                      src: params.row.imageUrl+"?x-oss-process=style/thumb-150"
                                     },
                                     style: {
                                       width:'100px',
@@ -220,7 +220,7 @@ export default {
               this.spinVisible = true;
               let that = this;
               let message = this.$Message;
-              util.ajax.get('/material/deleteMaterial/', {
+              util.ajax.get('/material/deleteMaterial/'+index, {
                       headers: {
                           "Content-Type": "application/json"
                       }
@@ -299,7 +299,6 @@ export default {
                       }
                   })
                   .then(function(response) {
-                      console.log(response.data.success);
                       if (response.data.success == true) {
                         that.data = response.data.aaData;
                         that.dataCount = response.data.iTotalRecords;
@@ -311,7 +310,6 @@ export default {
                   .catch(function(response) {
                       that.spinVisible = false;
                       message.error('获取数据操作失败!');
-
                   });
             },
             loadMatterialBySearchData(number,pageNum){
