@@ -64,53 +64,53 @@
         </FormItem>
         <FormItem label="简单--复杂" class="inputStyle">
             <Select v-model="formItem.select1">
-                <Option value="-3">-3</Option>
-                <Option value="-2.5">-2.5</Option>
-                <Option value="-2">-2</Option>
-                <Option value="-1.5">-1.5</Option>
-                <Option value="-1">-1</Option>
-                <Option value="-0.5">-0.5</Option>
-                <Option value="0">0</Option>
-                <Option value="0.5">0.5</Option>
-                <Option value="1">1</Option>
-                <Option value="1.5">1.5</Option>
-                <Option value="2">2</Option>
-                <Option value="2.5">2.5</Option>
-                <Option value="3">3</Option>
+              <Option value="-3.0">-3.0</Option>
+              <Option value="-2.5">-2.5</Option>
+              <Option value="-2.0">-2.0</Option>
+              <Option value="-1.5">-1.5</Option>
+              <Option value="-1.0">-1.0</Option>
+              <Option value="-0.5">-0.5</Option>
+              <Option value="0">0</Option>
+              <Option value="0.5">0.5</Option>
+              <Option value="1.0">1.0</Option>
+              <Option value="1.5">1.5</Option>
+              <Option value="2.0">2.0</Option>
+              <Option value="2.5">2.5</Option>
+              <Option value="3.0">3.0</Option>
             </Select>
         </FormItem>
         <FormItem label="硬朗--圆润" class="inputStyle">
             <Select v-model="formItem.select2">
-                <Option value="-3">-3</Option>
-                <Option value="-2.5">-2.5</Option>
-                <Option value="-2">-2</Option>
-                <Option value="-1.5">-1.5</Option>
-                <Option value="-1">-1</Option>
-                <Option value="-0.5">-0.5</Option>
-                <Option value="0">0</Option>
-                <Option value="0.5">0.5</Option>
-                <Option value="1">1</Option>
-                <Option value="1.5">1.5</Option>
-                <Option value="2">2</Option>
-                <Option value="2.5">2.5</Option>
-                <Option value="3">3</Option>
+              <Option value="-3.0">-3.0</Option>
+              <Option value="-2.5">-2.5</Option>
+              <Option value="-2.0">-2.0</Option>
+              <Option value="-1.5">-1.5</Option>
+              <Option value="-1.0">-1.0</Option>
+              <Option value="-0.5">-0.5</Option>
+              <Option value="0">0</Option>
+              <Option value="0.5">0.5</Option>
+              <Option value="1.0">1.0</Option>
+              <Option value="1.5">1.5</Option>
+              <Option value="2.0">2.0</Option>
+              <Option value="2.5">2.5</Option>
+              <Option value="3.0">3.0</Option>
             </Select>
         </FormItem>
         <FormItem label="冷酷--温暖" class="inputStyle">
             <Select v-model="formItem.select3">
-                <Option value="-3">-3</Option>
-                <Option value="-2.5">-2.5</Option>
-                <Option value="-2">-2</Option>
-                <Option value="-1.5">-1.5</Option>
-                <Option value="-1">-1</Option>
-                <Option value="-0.5">-0.5</Option>
-                <Option value="0">0</Option>
-                <Option value="0.5">0.5</Option>
-                <Option value="1">1</Option>
-                <Option value="1.5">1.5</Option>
-                <Option value="2">2</Option>
-                <Option value="2.5">2.5</Option>
-                <Option value="3">3</Option>
+              <Option value="-3.0">-3.0</Option>
+              <Option value="-2.5">-2.5</Option>
+              <Option value="-2.0">-2.0</Option>
+              <Option value="-1.5">-1.5</Option>
+              <Option value="-1.0">-1.0</Option>
+              <Option value="-0.5">-0.5</Option>
+              <Option value="0">0</Option>
+              <Option value="0.5">0.5</Option>
+              <Option value="1.0">1.0</Option>
+              <Option value="1.5">1.5</Option>
+              <Option value="2.0">2.0</Option>
+              <Option value="2.5">2.5</Option>
+              <Option value="3.0">3.0</Option>
             </Select>
         </FormItem>
 
@@ -227,7 +227,6 @@ export default {
                             loadingComponent.error();
                             message.error('操作失败!');
                         });
-
                 },
                 cancelClick() {
                     this.$router.push('materialManage');
@@ -289,19 +288,19 @@ export default {
                        that.formItem.name = response.data.object.name;
                        that.formItem.number = response.data.object.number;
                        that.formItem.categoryName = response.data.object.categoryName;
-                       that.formItem.select1 = response.data.object.select1;
-                       that.formItem.select2 = response.data.object.select2;
-                       that.formItem.select3 = response.data.object.select3;
+                       that.formItem.select1 = response.data.object.style1;
+                       that.formItem.select2 = response.data.object.style2;
+                       that.formItem.select3 = response.data.object.style3;
                        that.formItem.thumb = response.data.object.imageUrl + "?x-oss-process=style/thumb-300";
                        that.formItem.imageUrl = response.data.object.imageUrl;
                      } else {
                          message.error(response.data.message);
                      }
-                     this.spinVisible = false;
+                     that.spinVisible = false;
                  })
                  .catch(function(response) {
                      message.error('操作失败!');
-                     this.spinVisible = false;
+                     that.spinVisible = false;
                  });
            }
            else{

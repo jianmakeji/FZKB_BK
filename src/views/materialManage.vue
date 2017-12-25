@@ -220,7 +220,7 @@ export default {
               this.spinVisible = true;
               let that = this;
               let message = this.$Message;
-              util.ajax.get('/material/deleteMaterial/'+index, {
+              util.ajax.delete('/material/deleteMaterial/'+index, {
                       headers: {
                           "Content-Type": "application/json"
                       }
@@ -228,7 +228,7 @@ export default {
                   .then(function(response) {
                       if (response.data.success == true) {
                         message.success("操作成功！");
-                        that.loadMaterialByPage(this.pageSize,(currentPage - 1)*this.pageSize);
+                        that.loadMaterialByPage(that.pageSize,(that.currentPage - 1)*that.pageSize);
                       } else {
                         message.error(response.data.message);
                       }
