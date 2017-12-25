@@ -23,80 +23,64 @@
       </div>
       <div style="margin-top:15px">
           <Table border :columns="columns" :data="data"></Table>
-          <Page class="page" :total="dataCount" :page-size="pageSize" show-elevator></Page>
+          <Page class="page" v-if="materialPageVisible" :current="materialCurrentPage" :total="materialDataCount" :page-size="pageSize" @on-change="materialPageChange" show-elevator></Page>
+          <Page class="page" v-if="matchPageVisible" :current="matchCurrentPage" :total="matchDataCount" :page-size="pageSize" @on-change="matchPageChange" show-elevator></Page>
       </div>
+      <Spin size="large" fix v-if="spinVisible"></Spin>
     </div>
 </template>
 <script>
-import materialImage from '../resources/image/material-1.png'
+import util from '../libs/util';
+import materialImage from '../resources/image/material-1.png';
+
   let materialColumns = [
-    {
-        title: '图片',
-        key: 'pic',
-        align: 'center',
-        render: (h, params) => {
-            return  h('img', {
-                    attrs: {
-                      src: params.row.pic
-                    },
-                    style: {
-                      width:'100px',
-                      height:'100px'
-                    }
-                  })
-        }
-    },
-    {
-        title: '类别',
-        align: 'center',
-        key: 'category'
-    },
-    {
-        title: '编号',
-        align: 'center',
-        key: 'number'
-    },
-    {
-        title: '简单-复杂',
-        align: 'center',
-        key: 'style1'
-    },
-    {
-        title: '硬朗-圆润',
-        align: 'center',
-        key: 'style2'
-    },
-    {
-        title: '冷酷-温暖',
-        align: 'center',
-        key: 'style3'
-    },
-    {
-        title: '建档日期',
-        align: 'center',
-        key: 'createDate'
-    },
-    {
-        title: '操作',
-        key: 'action',
-        width: 180,
-        align: 'center',
-        render: (h, params) => {
-            return h('div', [
-                h('Button', {
-                    props: {
-                        type: 'error',
-                        size: 'small'
-                    },
-                    on: {
-                        click: () => {
-                            this.remove(params.index)
+        {
+            title: '图片',
+            key: 'pic',
+            align: 'center',
+            render: (h, params) => {
+                return  h('img', {
+                        attrs: {
+                          src: params.row.imageUrl+"?x-oss-process=style/thumb-150"
+                        },
+                        style: {
+                          width:'100px',
+                          height:'100px'
                         }
-                    }
-                }, '删除')
-            ]);
+                      })
+            }
+        },
+        {
+            title: '类别',
+            align: 'center',
+            key: 'categoryName'
+        },
+        {
+            title: '编号',
+            align: 'center',
+            key: 'number'
+        },
+        {
+            title: '简单-复杂',
+            align: 'center',
+            key: 'style1'
+        },
+        {
+            title: '硬朗-圆润',
+            align: 'center',
+            key: 'style2'
+        },
+        {
+            title: '冷酷-温暖',
+            align: 'center',
+            key: 'style3'
+        },
+        {
+            title: '建档日期',
+            align: 'center',
+            key: 'createTime'
         }
-    }];
+    ];
 
     let matchColumns =  [
       {
@@ -106,7 +90,7 @@ import materialImage from '../resources/image/material-1.png'
           render: (h, params) => {
               return  h('img', {
                       attrs: {
-                        src: params.row.pic
+                        src: materialImage
                       },
                       style: {
                         width:'100px',
@@ -117,12 +101,12 @@ import materialImage from '../resources/image/material-1.png'
       },
       {
           title: '内搭素材',
-          key: 'innerMaterial',
+          key: 'underwear',
           align: 'center',
           render: (h, params) => {
               return  h('img', {
                       attrs: {
-                        src: params.row.innerMaterial
+                        src: params.row.underwear
                       },
                       style: {
                         width:'100px',
@@ -133,12 +117,12 @@ import materialImage from '../resources/image/material-1.png'
       },
       {
           title: '外搭素材',
-          key: 'outterMaterial',
+          key: 'greatcoat',
           align: 'center',
           render: (h, params) => {
               return  h('img', {
                       attrs: {
-                        src: params.row.outterMaterial
+                        src: params.row.greatcoat
                       },
                       style: {
                         width:'100px',
@@ -149,12 +133,12 @@ import materialImage from '../resources/image/material-1.png'
       },
       {
           title: '下装素材',
-          key: 'underMaterial',
+          key: 'trousers',
           align: 'center',
           render: (h, params) => {
               return  h('img', {
                       attrs: {
-                        src: params.row.underMaterial
+                        src: params.row.trousers
                       },
                       style: {
                         width:'100px',
@@ -166,12 +150,12 @@ import materialImage from '../resources/image/material-1.png'
       {
           title: '设计师',
           align: 'center',
-          key: 'designer'
+          key: 'username'
       },
       {
           title: '创建时间',
           align: 'center',
-          key: 'createDate'
+          key: 'createTime'
       },
       {
           title: '操作',
@@ -191,7 +175,7 @@ import materialImage from '../resources/image/material-1.png'
                       },
                       on: {
                           click: () => {
-                              this.show(params.index)
+                              this.show(params.row.uwId,params.row.gcId,params.row.trId);
                           }
                       }
                   }, '查看')
@@ -205,153 +189,105 @@ import materialImage from '../resources/image/material-1.png'
             return {
               columns: materialColumns,
               data: [
-                  {
-                      pic: materialImage,
-                      category:'植物',
-                      number:'4-6',
-                      style1:'0.5',
-                      style2:'0.5',
-                      style3:'2',
-                      createDate:'2017-11-22'
-                  },
-                  {
-                      pic: materialImage,
-                      category:'植物',
-                      number:'4-6',
-                      style1:'0.5',
-                      style2:'0.5',
-                      style3:'2',
-                      createDate:'2017-11-22'
-                  },
-                  {
-                      pic: materialImage,
-                      category:'植物',
-                      number:'4-6',
-                      style1:'0.5',
-                      style2:'0.5',
-                      style3:'2',
-                      createDate:'2017-11-22'
-                  },
-                  {
-                      pic: materialImage,
-                      category:'植物',
-                      number:'4-6',
-                      style1:'0.5',
-                      style2:'0.5',
-                      style3:'2',
-                      createDate:'2017-11-22'
-                  },
-                  {
-                      pic: materialImage,
-                      category:'植物',
-                      number:'4-6',
-                      style1:'0.5',
-                      style2:'0.5',
-                      style3:'2',
-                      createDate:'2017-11-22'
-                  }
 
               ],
               typeChoice:'灵感素材',
-              dataCount:300,
-              pageSize:10
+              materialDataCount:0,
+              matchDataCount:0,
+              pageSize:10,
+              materialCurrentPage:0,
+              matchCurrentPage:0,
+              materialPageVisible:true,
+              matchPageVisible:false,
             }
         },
         methods:{
           radioChange(value){
             if(value == '灵感素材'){
-
+              this.typeChoice = "灵感素材";
+              this.columns = materialColumns;
+              this.loadMaterialByPage(this.pageSize,(this.materialCurrentPage - 1)*this.pageSize);
+              this.materialPageVisible = true;
+              this.matchPageVisible = false;
             }
             else if (value == '搭配'){
-
+              this.typeChoice = "搭配";
               this.columns = matchColumns;
-
-              let matchData = [
-                {
-                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                    innerMaterial:materialImage,
-                    outterMaterial:materialImage,
-                    underMaterial:materialImage,
-                    designer:'2',
-                    createDate:'2017-11-22'
-                },
-                {
-                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                    innerMaterial:materialImage,
-                    outterMaterial:materialImage,
-                    underMaterial:materialImage,
-                    designer:'2',
-                    createDate:'2017-11-22'
-                },
-                {
-                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                    innerMaterial:materialImage,
-                    outterMaterial:materialImage,
-                    underMaterial:materialImage,
-                    designer:'2',
-                    createDate:'2017-11-22'
-                },
-                {
-                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                    innerMaterial:materialImage,
-                    outterMaterial:materialImage,
-                    underMaterial:materialImage,
-                    designer:'2',
-                    createDate:'2017-11-22'
-                },
-                {
-                    pic: 'http://oaycvzlnh.bkt.clouddn.com/5963804709496.png',
-                    innerMaterial:materialImage,
-                    outterMaterial:materialImage,
-                    underMaterial:materialImage,
-                    designer:'2',
-                    createDate:'2017-11-22'
-                }
-              ];
-              this.data = matchData;
+              this.loadMatchData(this.pageSize,(this.matchCurrentPage - 1)*this.pageSize);
+              this.matchPageVisible = true;
+              this.materialPageVisible = false;
             }
           },
-          loadDesignerData(pageSize,pageNum){
-            console.log(pageSize,pageNum);
-
-            let limit = pageSize;
-            let offset = pageSize * (pageNum - 1);
-            this.$Loading.start();
-            $.ajax({
-              type: 'POST',
-              url: 'url',
-              data: {limit: limit, offset:offset},
-              dataType: 'json',
-              success: function(result){
-                this.$Loading.finish();
-              },
-              error:function (XMLHttpRequest, textStatus, errorThrown) {
-                this.$Loading.error();
-              }
-
-            });
+          materialPageChange(pageNum){
+              this.materialCurrentPage = pageNum;
+              this.loadMaterialByPage(this.pageSize,(pageNum - 1)*this.pageSize);
           },
-          loadDesignerBySearchData(keyward,pageSize,pageNum){
-            let limit = pageSize;
-            let offset = pageSize * (pageNum - 1);
-            this.$Loading.start();
-            $.ajax({
-              type: 'POST',
-              url: 'url',
-              data: {limit: limit, offset:offset,keyward:keyward},
-              dataType: 'json',
-              success: function(result){
-                this.$Loading.finish();
-              },
-              error:function (XMLHttpRequest, textStatus, errorThrown) {
-                this.$Loading.error();
-              }
+          matchPageChange(pageNum){
+              this.matchCurrentPage = pageNum;
+              this.loadMatchData(this.pageSize,(pageNum - 1)*this.pageSize);
+          },
+          loadMaterialByPage(limit,offset){
+            this.spinVisible = true;
+            let that = this;
+            let message = this.$Message;
+            util.ajax.get('/material/getDataByPage', {
+                    params:{
+                      limit: limit,
+                      offset: offset,
+                    }
+                }, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(function(response) {
+                    if (response.data.success == true) {
+                      that.data = response.data.aaData;
+                      that.materialDataCount = response.data.iTotalRecords;
+                    } else {
+                      message.error(response.data.message);
+                    }
+                    that.spinVisible = false;
+                })
+                .catch(function(response) {
+                    that.spinVisible = false;
+                    message.error('获取数据操作失败!');
+                });
+          },
+          loadMatchData(limit,offset){
+            this.spinVisible = true;
+            let that = this;
+            let message = this.$Message;
+            util.ajax.get('/match/getDataByPage', {
+                    params:{
+                      limit: limit,
+                      offset: offset,
+                    }
+                }, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(function(response) {
+                    if (response.data.success == true) {
+                      that.data = response.data.aaData;
+                      that.matchDataCount = response.data.iTotalRecords;
+                    } else {
+                      message.error(response.data.message);
+                    }
+                    that.spinVisible = false;
+                })
+                .catch(function(response) {
+                    that.spinVisible = false;
+                    message.error('获取数据操作失败!');
 
-            });
-          }
+                });
+          },
         },
         created(){
-          //第一次加载初始化表格数据
+          this.materialCurrentPage = 1;
+          this.matchCurrentPage = 1;
+          this.loadMaterialByPage(10,0);
         }
     }
 </script>

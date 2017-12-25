@@ -41,6 +41,12 @@ const routers = [{
       },
       component: (resolve) => require(['./views/addDesigner.vue'], resolve)
     },{
+      path: '/addDesigner/:id',
+      meta: {
+          title: '服装设计师看板数据管理系统'
+      },
+      component: (resolve) => require(['./views/addDesigner.vue'], resolve)
+    },{
       path: '/designerDetail',
       meta: {
           title: '服装设计师看板数据管理系统'

@@ -181,7 +181,7 @@
                   this.spinVisible = true;
                   let that = this;
                   let message = this.$Message;
-                  util.ajax.get('/designer/deleteDesigner/'+index, {
+                  util.ajax.delete('/designer/deleteDesigner/'+index, {
                           headers: {
                               "Content-Type": "application/json"
                           }
@@ -189,7 +189,7 @@
                       .then(function(response) {
                           if (response.data.success == true) {
                             message.success("操作成功！");
-                            that.loadMaterialByPage(this.pageSize,(currentPage - 1)*this.pageSize);
+                            that.loadDesignerData(that.pageSize,(that.currentPage - 1)*that.pageSize);
                           } else {
                             message.error(response.data.message);
                           }
@@ -205,7 +205,7 @@
                 },
                 pageChange(pageNum){
                   this.currentPage = pageNum;
-                  this.loadMaterialByPage(this.pageSize,(pageNum - 1)*this.pageSize);
+                  this.loadDesignerData(this.pageSize,(pageNum - 1)*this.pageSize);
                 },
                 loadDesignerData(limit,offset){
                   this.spinVisible = true;
@@ -268,7 +268,7 @@
             },
             created(){
               this.currentPage = 1;
-              this.loadMaterialByPage(10,0);
+              this.loadDesignerData(10,0);
             }
         }
 </script>
