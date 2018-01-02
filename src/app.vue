@@ -6,7 +6,6 @@
         border-radius: 4px;
         overflow: hidden;
     }
-
     .layout-content{
         min-height: 200px;
         margin: 15px;
@@ -46,7 +45,6 @@
     .ivu-col{
         transition: width .2s ease-in-out;
     }
-
 </style>
 <template>
   <div class="layout" :class="{'layout-hide-text': spanLeft < 4}">
@@ -85,13 +83,13 @@
           </i-col>
       </Row>
 
-      <Modal id="modalDialog" v-model="modal" width="360" :closable="false" :mask-closable="false" :loading="true" :styles="{top: '300px'}">
+      <Modal id="modalDialog" v-model="modal" width="360" :closable="false" :mask-closable="false" :loading="true" :styles="{top: '30%'}">
         <p slot="header" style="color:#f60;text-align:center">
             <Icon type="easel"></Icon>
             <span>请登录</span>
         </p>
         <div style="text-align:center">
-            <Input type="text" v-model="formInline.user" placeholder="Username">
+            <Input type="text" v-model="formInline.username" placeholder="Username">
                   <Icon type="ios-person-outline" slot="prepend"></Icon>
             </Input>
             <Input type="password" v-model="formInline.password" placeholder="Password" style="margin-top:10px">
@@ -106,10 +104,14 @@
   </div>
 </template>
 <script>
-import $ from 'jquery'
+import util from './libs/util';
+import $ from 'jquery';
+var qs = require('qs');
+
     $(document).ready(function(){
       $("#mainBoard").hide();
     });
+
     export default {
         data () {
             return {
@@ -117,7 +119,7 @@ import $ from 'jquery'
                 spanRight: 20,
                 modal:true,
                 formInline: {
-                    user: '',
+                    username: '',
                     password: ''
                 }
             }
@@ -154,11 +156,54 @@ import $ from 'jquery'
               }
             },
             ok(){
-              $("#modalDialog").hide();
-              $("#mainBoard").fadeIn(1100,function(){
-                $(this).show();
+
+              let message = this.$Message;
+              let that = this;
+              if (this.formInline.username == '' || this.formInline.password == ''){
+                message.error('请填写用户名或者密码!');
+              }else{
+                this.$Loading.start();
+                util.ajax.post('/authorityCheck', qs.stringify({
+                  username:this.formInline.username,
+                  password:this.formInline.password
+                }),{headers: {"Content-Type": "application/x-www-form-urlencoded"}})
+                .then(function (response) {
+                  if(response.data.resultCode == 200){
+                    util.ajax.defaults.headers.common['Authorization'] = response.data.object.token;
+                    util.ajax.defaults.headers.common['userId'] = response.data.object.userId;
+                    $("#modalDialog").hide();
+                    $("#mainBoard").fadeIn(1100,function(){
+                      $(this).show();
+                    });
+                  }
+                  else{
+                    message.error(response.data.message);
+                  }
+                  that.$Loading.finish();
+                })
+                .catch(function (response) {
+                  that.$Loading.error();
+                  message.error('操作失败!');
+                });
+              }
+
+            }
+        },
+        created(){
+          /*
+          let that = this;
+          util.ajax.interceptors.response.use(function(response){
+            console.log(response.data.code);
+            if (response.data.code == -999){
+              that.$router.push('/');
+              $("#modalDialog").show();
+              $("#mainBoard").fadeOut(800,function(){
+                $(this).hide();
               });
             }
+            return response;
+          });
+          */
         }
     }
 </script>

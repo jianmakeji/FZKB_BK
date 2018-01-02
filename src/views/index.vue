@@ -11,7 +11,7 @@
     export default {
         data () {
             return {
-                msg:'hello iview!'
+                msg:'欢迎使用服装设计师看板系统!'
             }
         }
     }

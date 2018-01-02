@@ -12,14 +12,12 @@ util.title = function(title) {
 const ajaxUrl = env === 'development' ?
     '/api' :
     env === 'production' ?
-    'https://www.url.com' :
-    'https://debug.url.com';
+    '/api' :
+    '/api';
 
 util.ajax = axios.create({
     baseURL: ajaxUrl,
     withCredentials:true,
     timeout: 30000
-
 });
-
 export default util;

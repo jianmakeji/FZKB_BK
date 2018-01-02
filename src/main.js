@@ -7,7 +7,6 @@ import Util from './libs/util';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
 
-
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
@@ -30,7 +29,6 @@ router.afterEach(() => {
     iView.LoadingBar.finish();
     window.scrollTo(0, 0);
 });
-
 
 const store = new Vuex.Store({
     state: {

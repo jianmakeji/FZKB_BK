@@ -74,7 +74,6 @@
               that.$Loading.finish();
             })
             .catch(function (response) {
-              console.log("====:"+response);
               that.$Loading.error();
               message.error('操作失败!');
             });

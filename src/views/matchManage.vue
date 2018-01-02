@@ -214,7 +214,8 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.row.uwId,params.row.gcId,params.row.trId);
+                                            //window.open(params.row.uwId,params.row.gcId,params.row.trId);
+                                            window.open("http://localhost:8080/fzkb/matchReview?uwId="+params.row.uwId+"&gcId="+params.row.gcId+"&trId="+params.row.trId);
                                         }
                                     }
                                 }, '查看'),
