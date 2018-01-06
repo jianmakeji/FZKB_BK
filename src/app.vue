@@ -207,20 +207,7 @@ var qs = require('qs');
             }
         },
         created(){
-          /*
-          let that = this;
-          util.ajax.interceptors.response.use(function(response){
-            console.log(response.data.code);
-            if (response.data.code == -999){
-              that.$router.push('/');
-              $("#modalDialog").show();
-              $("#mainBoard").fadeOut(800,function(){
-                $(this).hide();
-              });
-            }
-            return response;
-          });
-          */
+          
         }
     }
 </script>
