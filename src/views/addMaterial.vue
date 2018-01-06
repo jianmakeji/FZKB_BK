@@ -33,6 +33,10 @@
     <hr style="height:1px;border:none;border-top:1px dashed #dddee1;" />
 
     <Form :model="formItem" :label-width="80" style="margin-top:10px">
+        <FormItem label="名称" class="inputStyle">
+            <Input v-model="formItem.name" placeholder="请输入名称..."></Input>
+        </FormItem>
+
         <FormItem label="编号" class="inputStyle">
             <Input v-model="formItem.number" placeholder="请输入编号..."></Input>
         </FormItem>
@@ -186,7 +190,8 @@ export default {
                 host: hostPrefix,
                 spinVisible:false,
                 id:0,
-                insertOrUpdate:true
+                insertOrUpdate:true,
+                userId:0,
             }
         },
         methods: {
@@ -202,7 +207,8 @@ export default {
                       style1: this.formItem.select1,
                       style2: this.formItem.select2,
                       style3: this.formItem.select3,
-                      imageUrl: this.formItem.imageUrl
+                      imageUrl: this.formItem.imageUrl,
+                      userId:this.userId,
                     };
                     if (this.insertOrUpdate){
                         postUrl = "/material/createMaterial";
@@ -210,6 +216,7 @@ export default {
                         postUrl = "/material/updateMaterial";
                         postData.id = this.id;
                     }
+                    let that = this;
                     util.ajax.post(postUrl, postData, {
                             headers: {
                                 "Content-Type": "application/json"
@@ -218,6 +225,7 @@ export default {
                         .then(function(response) {
                             if (response.data.resultCode == 200) {
                                 message.success('添加成功！');
+                                that.$router.push('../materialManage');
                             } else {
                                 message.error(response.data.message);
                             }
@@ -229,7 +237,7 @@ export default {
                         });
                 },
                 cancelClick() {
-                    this.$router.push('materialManage');
+                    this.$router.push('../materialManage');
                 },
                 handleView(name) {
                     this.visible = true;
@@ -306,6 +314,7 @@ export default {
            else{
              this.spinVisible = false;
              this.insertOrUpdate = true;
+             this.userId = util.ajax.defaults.headers.common['userId'];
            }
         }
 }

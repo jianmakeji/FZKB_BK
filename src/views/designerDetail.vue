@@ -31,7 +31,6 @@
 </template>
 <script>
 import util from '../libs/util';
-import materialImage from '../resources/image/material-1.png';
 
   let materialColumns = [
         {

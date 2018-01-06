@@ -68,11 +68,11 @@
       </div>
       <hr style="height:1px;border:none;border-top:1px dashed #dddee1;"/>
       <div>
-          <Button type="text" class="title" >搭配管理</Button>
-          <Button type="primary" icon="ios-search" class="searchBtn">搜索</Button>
-          <Input placeholder="请输入..." class="serarchText"></Input>
+          <Button type="primary"  class="title" @click="addMatch">+ 新建搭配</Button>
+          <Button type="primary" icon="ios-search" class="searchBtn" @click="searchClick">搜索</Button>
+          <Input placeholder="请输入..." class="serarchText" v-model="keyValue"></Input>
       </div>
-      <div class="panel">
+      <div class="panel" v-show="conditionPanelVisible">
         <Card>
           <p slot="title">
               <Icon type="eye"></Icon>
@@ -109,7 +109,7 @@
 </template>
 <script>
 import $ from 'jquery';
-import materialImage from '../resources/image/material-1.png';
+import modelImage from '../resources/image/model.png';
 import util from '../libs/util';
 
 var collapse = 1;
@@ -117,6 +117,7 @@ var categoryCondition = "";
 var style1Condition = "";
 var style2Condition = "";
 var style3Condition = "";
+var dataCondition = 0; //0：没有条件，查询全部 1：按照编号查询 2：按照标签查询
 
 export default {
         data () {
@@ -129,11 +130,11 @@ export default {
                         render: (h, params) => {
                             return  h('img', {
                                     attrs: {
-                                      src: materialImage
+                                      src: modelImage
                                     },
                                     style: {
-                                      width:'100px',
-                                      height:'100px'
+                                      width:'50px',
+                                      height:'80px'
                                     }
                                   })
                         }
@@ -245,11 +246,23 @@ export default {
                 pageSize:10,
                 spinVisible:false,
                 currentPage:0,
+                keyValue:"",
+                userId:0,
+                authCode:"",
+                roleId:0,
+                conditionPanelVisible:true,
             }
         },
         methods: {
-            show(uwId,gcId,trId){
-
+            addMatch(){
+              let view = window.open("http://localhost:8080/fzkb/matchPage?authCode="+this.authCode+"&userId="+this.userId);
+              let that = this;
+              let interval = setInterval(function(){
+                if (view.closed){
+                  that.loadMatchData(that.pageSize,0);
+                  clearInterval(interval);
+                }
+              },1000);
             },
             remove (index) {
               this.spinVisible = true;
@@ -311,13 +324,44 @@ export default {
                   style3Condition = style3Condition.split(tagValue + ",").join("");
                 }
               }
+              this.currentPage = 1;
+              let result1 = categoryCondition.length==0;
+              let result2 = style1Condition.length==0;
+              let result3 = style2Condition.length==0;
+              let result4 = style3Condition.length==0;
+
+              if (result1 && result2 && result3 && result4){
+                    dataCondition = 0;
+                    this.loadMatchData(this.pageSize,0);
+              }else{
+                    dataCondition = 2;
+                    this.loadMatchByCondition(this.pageSize,0);
+              }
+            },
+            searchClick(){
+              this.currentPage = 1;
+              if (this.keyValue == ""){
+                dataCondition = 0;
+                this.loadMatchByPage(this.pageSize,0);
+              }else{
+                dataCondition = 1;
+                this.loadMatchBySearchData(this.keyValue,0);
+              }
             },
             addMaterial(){
               this.$router.push('addMaterial');
             },
             pageChange(pageNum){
               this.currentPage = pageNum;
-              this.loadMatchData(this.pageSize,(pageNum - 1)*this.pageSize);
+              if (dataCondition == 0){
+                this.loadMatchData(this.pageSize,(pageNum - 1)*this.pageSize);
+              }
+              else if (dataCondition == 1){
+                this.loadMatchBySearchData(this.keyValue,(pageNum - 1)*this.pageSize);
+              }
+              else if (dataCondition == 2){
+                this.loadMatchByCondition(this.pageSize,(pageNum - 1)*this.pageSize);
+              }
             },
 
             loadMatchData(limit,offset){
@@ -328,6 +372,7 @@ export default {
                       params:{
                         limit: limit,
                         offset: offset,
+                        userId:that.userId
                       }
                   }, {
                       headers: {
@@ -347,6 +392,70 @@ export default {
                       that.spinVisible = false;
                       message.error('获取数据操作失败!');
 
+                  });
+            },
+            loadMatchByCondition(limit,offset){
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              util.ajax.get('/match/getDataPageByTag', {
+                      params:{
+                        limit: limit,
+                        offset: offset,
+                        category:categoryCondition,
+                        style1:style1Condition,
+                        style2:style2Condition,
+                        style3:style3Condition,
+                        userId:that.userId
+                      }
+                  }, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      if (response.data.success == true) {
+                        that.data = response.data.aaData;
+                        that.dataCount = response.data.iTotalRecords;
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
+                  });
+            },
+            loadMatchBySearchData(keyword,pageNum){
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              this.currentPage = pageNum;
+              util.ajax.get('/match/getDataBySearchKeyword', {
+                      params:{
+                        limit: that.pageSize,
+                        offset: that.pageSize * (pageNum - 1),
+                        keyword:keyword,
+                        userId:that.userId
+                      }
+                  }, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      if (response.data.success == true) {
+                        that.data = response.data.aaData;
+                        that.dataCount = response.data.iTotalRecords;
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
                   });
             },
             arrowAreaClick(){
@@ -377,6 +486,16 @@ export default {
           style1Condition = "";
           style2Condition = "";
           style3Condition = "";
+          this.authCode = util.ajax.defaults.headers.common['Authorization'];
+          this.roleId = util.ajax.defaults.headers.common['roleId'];
+          if (this.roleId == 0){
+            this.conditionPanelVisible = false;
+            this.userId = util.ajax.defaults.headers.common['userId'];
+          }
+          else{
+            this.conditionPanelVisible = true;
+            this.userId = 0;
+          }
           this.currentPage = 1;
           this.loadMatchData(this.pageSize,0);
         }

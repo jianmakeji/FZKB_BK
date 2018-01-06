@@ -68,10 +68,10 @@
     <hr style="height:1px;border:none;border-top:1px dashed #dddee1;"/>
     <div>
         <Button type="primary" class="addMaterial" @click="addMaterial">+ 新建素材</Button>
-        <Button type="primary" icon="ios-search" class="searchBtn">搜索</Button>
-        <Input placeholder="请输入..." class="serarchText"></Input>
+        <Button type="primary" icon="ios-search" class="searchBtn" @click="searchData">搜索</Button>
+        <Input placeholder="请输入..." class="serarchText" v-model="keyValue"></Input>
     </div>
-    <div class="panel">
+    <div class="panel" v-show="conditionPanelVisible">
       <Card>
         <p slot="title">
             <Icon type="eye"></Icon>
@@ -108,7 +108,6 @@
 </template>
 <script>
 import $ from 'jquery'
-import materialImage from '../resources/image/material-1.png'
 import util from '../libs/util';
 
 var collapse = 1;
@@ -116,6 +115,7 @@ var categoryCondition = "";
 var style1Condition = "";
 var style2Condition = "";
 var style3Condition = "";
+var dataCondition = 0; //0：没有条件，查询全部 1：按照编号查询 2：按照标签查询
 export default {
         data () {
             return {
@@ -213,6 +213,10 @@ export default {
                 pageSize:10,
                 spinVisible:false,
                 currentPage:0,
+                keyValue:"",
+                roleId:0,
+                userId:0,
+                conditionPanelVisible:true,
             }
         },
         methods: {
@@ -276,13 +280,45 @@ export default {
                   style3Condition = style3Condition.split(tagValue + ",").join("");
                 }
               }
+              this.currentPage = 1;
+              let result1 = categoryCondition.length==0;
+              let result2 = style1Condition.length==0;
+              let result3 = style2Condition.length==0;
+              let result4 = style3Condition.length==0;
+
+              if (result1 && result2 && result3 && result4){
+                    dataCondition = 0;
+                    this.loadMaterialByPage(this.pageSize,0);
+              }else{
+                    dataCondition = 2;
+                    this.loadMaterialByCondition(this.pageSize,0);
+              }
+            },
+            searchData(){
+              this.currentPage = 1;
+              if (this.keyValue == ""){
+                dataCondition = 0;
+                this.loadMaterialByPage(this.pageSize,0);
+              }else{
+                dataCondition = 1;
+                this.loadMatterialBySearchData(this.keyValue,0);
+              }
             },
             addMaterial(){
               this.$router.push('addMaterial');
             },
             pageChange(pageNum){
               this.currentPage = pageNum;
-              this.loadMaterialByPage(this.pageSize,(pageNum - 1)*this.pageSize);
+              if (dataCondition == 0){
+                this.loadMaterialByPage(this.pageSize,(pageNum - 1)*this.pageSize);
+              }
+              else if (dataCondition == 1){
+                this.loadMatterialBySearchData(this.pageSize,(pageNum - 1)*this.pageSize);
+              }
+              else if (dataCondition == 2){
+                this.loadMaterialByCondition(this.pageSize,(pageNum - 1)*this.pageSize);
+              }
+
             },
             loadMaterialByPage(limit,offset){
               this.spinVisible = true;
@@ -292,6 +328,40 @@ export default {
                       params:{
                         limit: limit,
                         offset: offset,
+                        userId:that.userId,
+                      }
+                  }, {
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(function(response) {
+                      if (response.data.success == true) {
+                        that.data = response.data.aaData;
+                        that.dataCount = response.data.iTotalRecords;
+                      } else {
+                        message.error(response.data.message);
+                      }
+                      that.spinVisible = false;
+                  })
+                  .catch(function(response) {
+                      that.spinVisible = false;
+                      message.error('获取数据操作失败!');
+                  });
+            },
+            loadMaterialByCondition(limit,offset){
+              this.spinVisible = true;
+              let that = this;
+              let message = this.$Message;
+              util.ajax.get('/material/getDataPageByTag', {
+                      params:{
+                        limit: limit,
+                        offset: offset,
+                        category:categoryCondition,
+                        style1:style1Condition,
+                        style2:style2Condition,
+                        style3:style3Condition,
+                        userId:that.userId,
                       }
                   }, {
                       headers: {
@@ -321,7 +391,8 @@ export default {
                       params:{
                         limit: that.pageSize,
                         offset: that.pageSize * (pageNum - 1),
-                        number:number
+                        number:number,
+                        userId:that.userId,
                       }
                   }, {
                       headers: {
@@ -372,6 +443,15 @@ export default {
             //第一次加载初始化表格数据
             this.currentPage = 1;
             this.loadMaterialByPage(10,0);
+            this.roleId = util.ajax.defaults.headers.common['roleId'];
+            if (this.roleId == 0){
+              this.userId = util.ajax.defaults.headers.common['userId'];
+              this.conditionPanelVisible = false;
+            }
+            else{
+              this.userId = 0;
+              this.conditionPanelVisible = true;
+            }
         }
     }
 

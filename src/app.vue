@@ -32,9 +32,9 @@
     .layout-logo-left{
         width: 90%;
         height: 30px;
-        background: #5b6270;
-        border-radius: 3px;
+        color: white;
         margin: 15px auto;
+        font-size: 20px;
     }
     .layout-ceiling-main a{
         color: #9ba7b5;
@@ -45,13 +45,14 @@
     .ivu-col{
         transition: width .2s ease-in-out;
     }
+
 </style>
 <template>
   <div class="layout" :class="{'layout-hide-text': spanLeft < 4}">
       <Row type="flex" id="mainBoard">
           <i-col :span="spanLeft" class="layout-menu-left">
               <i-menu active-name="1-2" theme="dark" width="auto" :open-names="['1']" @on-select="menuClick">
-                  <div class="layout-logo-left"></div>
+                  <div class="layout-logo-left">服装设计看板系统</div>
                   <Submenu name="1">
                       <template slot="title">
                           <Icon type="ios-navigate" :size="iconSize"></Icon>
@@ -59,7 +60,8 @@
                       </template>
                       <Menu-item name="materialManage">灵感素材管理</Menu-item>
                       <Menu-item name="matchManage">搭配管理</Menu-item>
-                      <Menu-item name="designerManage">设计师管理</Menu-item>
+                      <Menu-item v-show="desingerMenu" name="designerManage">设计师管理</Menu-item>
+                      <Menu-item name="logOut">退出</Menu-item>
                   </Submenu>
               </i-menu>
 
@@ -121,7 +123,8 @@ var qs = require('qs');
                 formInline: {
                     username: '',
                     password: ''
-                }
+                },
+                desingerMenu:false
             }
         },
         computed: {
@@ -154,6 +157,13 @@ var qs = require('qs');
               else if (name == 'designerManage'){
                 this.$router.push('../designerManage');
               }
+              else if (name == 'logOut'){
+                this.$router.push('../');
+                $("#modalDialog").show();
+                $("#mainBoard").fadeIn(1100,function(){
+                  $(this).hide();
+                });
+              }
             },
             ok(){
 
@@ -171,6 +181,13 @@ var qs = require('qs');
                   if(response.data.resultCode == 200){
                     util.ajax.defaults.headers.common['Authorization'] = response.data.object.token;
                     util.ajax.defaults.headers.common['userId'] = response.data.object.userId;
+                    util.ajax.defaults.headers.common['roleId'] = response.data.object.roleId;
+                    if (response.data.object.roleId == 1){
+                      that.desingerMenu = true;
+                    }
+                    else{
+                      that.desingerMenu = false;
+                    }
                     $("#modalDialog").hide();
                     $("#mainBoard").fadeIn(1100,function(){
                       $(this).show();
