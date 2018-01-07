@@ -57,16 +57,34 @@
             this.$Loading.start();
             let message = this.$Message;
             let that = this;
-            util.ajax.post('/designer/createDesigner', {
+            var postUrl = "";
+            var postData = {
               username:this.formItem.username,
               realname: this.formItem.realname,
               password:this.formItem.password,
               introduce:this.formItem.introduce
-            },{headers: {"Content-Type": "application/json"}})
+            };
+
+            if (this.insertOrUpdate){
+                postUrl = "/designer/createDesigner";
+            }else{
+                postUrl = "/designer/updateDesigner";
+                postData.id = this.id;
+            }
+
+            util.ajax.post(postUrl,postData,
+              {
+                headers: {"Content-Type": "application/json"}
+              })
             .then(function (response) {
               if(response.data.resultCode == 200){
                 message.success('添加成功！');
-                that.$router.push('designerManage');
+                if (this.id > 0){
+                  this.$router.push('../designerManage');
+                }
+                else{
+                  this.$router.push('designerManage');
+                }
               }
               else{
                 message.error(response.message);

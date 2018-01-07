@@ -215,8 +215,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            //window.open(params.row.uwId,params.row.gcId,params.row.trId);
-                                            window.open("http://localhost:8080/fzkb/matchReview?uwId="+params.row.uwId+"&gcId="+params.row.gcId+"&trId="+params.row.trId);
+                                            window.open(util.threeJsUrl + "matchReview?uwId="+params.row.uwId+"&gcId="+params.row.gcId+"&trId="+params.row.trId);
                                         }
                                     }
                                 }, '查看'),
@@ -255,7 +254,7 @@ export default {
         },
         methods: {
             addMatch(){
-              let view = window.open("http://localhost:8080/fzkb/matchPage?authCode="+this.authCode+"&userId="+this.userId);
+              let view = window.open(util.threeJsUrl + "matchPage?authCode="+this.authCode+"&userId="+this.userId);
               let that = this;
               let interval = setInterval(function(){
                 if (view.closed){

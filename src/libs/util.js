@@ -20,4 +20,7 @@ util.ajax = axios.create({
     withCredentials:true,
     timeout: 30000
 });
+
+util.threeJsUrl = "http://localhost:8080/fzkb/";
+
 export default util;

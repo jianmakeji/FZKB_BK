@@ -31,6 +31,7 @@
 </template>
 <script>
 import util from '../libs/util';
+import modelImage from '../resources/image/model.png';
 
   let materialColumns = [
         {
@@ -89,11 +90,11 @@ import util from '../libs/util';
           render: (h, params) => {
               return  h('img', {
                       attrs: {
-                        src: materialImage
+                        src: modelImage
                       },
                       style: {
-                        width:'100px',
-                        height:'100px'
+                        width:'50px',
+                        height:'80px'
                       }
                     })
           }
@@ -174,7 +175,7 @@ import util from '../libs/util';
                       },
                       on: {
                           click: () => {
-                              this.show(params.row.uwId,params.row.gcId,params.row.trId);
+                              window.open(util.threeJsUrl + "matchReview?uwId="+params.row.uwId+"&gcId="+params.row.gcId+"&trId="+params.row.trId);
                           }
                       }
                   }, '查看')
@@ -198,6 +199,7 @@ import util from '../libs/util';
               matchCurrentPage:0,
               materialPageVisible:true,
               matchPageVisible:false,
+              userId:0,
             }
         },
         methods:{
@@ -233,6 +235,7 @@ import util from '../libs/util';
                     params:{
                       limit: limit,
                       offset: offset,
+                      userId:that.userId,
                     }
                 }, {
                     headers: {
@@ -261,6 +264,7 @@ import util from '../libs/util';
                     params:{
                       limit: limit,
                       offset: offset,
+                      userId:that.userId,
                     }
                 }, {
                     headers: {
@@ -286,6 +290,13 @@ import util from '../libs/util';
         created(){
           this.materialCurrentPage = 1;
           this.matchCurrentPage = 1;
+          var roleId = util.ajax.defaults.headers.common['roleId'];
+          if (roleId == 1){
+            this.userId = 0;
+          }
+          else{
+            this.userId = util.ajax.defaults.headers.common['userId'];
+          }
           this.loadMaterialByPage(10,0);
         }
     }
