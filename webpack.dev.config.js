@@ -39,6 +39,7 @@ module.exports = merge(webpackBaseConfig, {
         historyApiFallback: true,
         hot: true,
         inline: true,
+        port:8998,
         stats: { colors: true },
         proxy: {
             //匹配代理的url
