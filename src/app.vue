@@ -182,6 +182,7 @@ var qs = require('qs');
                     util.ajax.defaults.headers.common['Authorization'] = response.data.object.token;
                     util.ajax.defaults.headers.common['userId'] = response.data.object.userId;
                     util.ajax.defaults.headers.common['roleId'] = response.data.object.roleId;
+                    
                     if (response.data.object.roleId == 1){
                       that.desingerMenu = true;
                     }
@@ -207,7 +208,7 @@ var qs = require('qs');
             }
         },
         created(){
-          
+
         }
     }
 </script>
