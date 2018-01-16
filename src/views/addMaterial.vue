@@ -179,7 +179,7 @@ export default {
                     select1: '',
                     select2: '',
                     select3: '',
-                    thumb: '',
+                    thumb: uploadImage,
                     imageUrl: ''
                 },
                 g_object_name: '',

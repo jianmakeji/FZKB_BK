@@ -85,7 +85,7 @@
           </i-col>
       </Row>
 
-      <Modal id="modalDialog" v-model="modal" width="360" :closable="false" :mask-closable="false" :loading="true" :styles="{top: '30%'}">
+      <Modal id="modalDialog" v-model="modal" width="360" :closable="false" :mask-closable="false" :loading="true" :styles="{top: '20%'}">
         <p slot="header" style="color:#f60;text-align:center">
             <Icon type="easel"></Icon>
             <span>请登录</span>
@@ -100,7 +100,11 @@
         </div>
         <div slot="footer">
             <Button type="primary" size="large" long  @click="ok">确认</Button>
+            <div style="margin-top:30px;text-align:100%">
+                移动端请扫一扫：<img :src="qrImage"  style="width:100px;height:100px"/>
+            </div>
         </div>
+
     </Modal>
 
   </div>
@@ -108,6 +112,8 @@
 <script>
 import util from './libs/util';
 import $ from 'jquery';
+import qrImage from './resources/image/mobile_qr_code.png'
+
 var qs = require('qs');
 
     $(document).ready(function(){
@@ -124,7 +130,8 @@ var qs = require('qs');
                     username: '',
                     password: ''
                 },
-                desingerMenu:false
+                desingerMenu:false,
+                qrImage:qrImage,
             }
         },
         computed: {
@@ -182,7 +189,7 @@ var qs = require('qs');
                     util.ajax.defaults.headers.common['Authorization'] = response.data.object.token;
                     util.ajax.defaults.headers.common['userId'] = response.data.object.userId;
                     util.ajax.defaults.headers.common['roleId'] = response.data.object.roleId;
-                    
+
                     if (response.data.object.roleId == 1){
                       that.desingerMenu = true;
                     }
