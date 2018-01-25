@@ -267,7 +267,7 @@ export default {
               this.spinVisible = true;
               let that = this;
               let message = this.$Message;
-              util.ajax.get('/match/deleteMatch/'+index, {
+              util.ajax.delete('/match/deleteMatch/'+index, {
                       headers: {
                           "Content-Type": "application/json"
                       }
