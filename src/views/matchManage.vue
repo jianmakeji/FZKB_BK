@@ -275,7 +275,7 @@ export default {
                   .then(function(response) {
                       if (response.data.success == true) {
                         message.success("操作成功！");
-                        that.loadMatchData(this.pageSize,(currentPage - 1)*this.pageSize);
+                        that.loadMatchData(that.pageSize,(that.currentPage - 1)*that.pageSize);
                       } else {
                         message.error(response.data.message);
                       }
