@@ -3,7 +3,7 @@ const routers = [{
         meta: {
             title: '服装设计师看板数据管理系统'
         },
-        component: (resolve) => require(['./views/index.vue'], resolve)
+        
     },{
             path: '/index',
             meta: {

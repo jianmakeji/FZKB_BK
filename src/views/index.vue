@@ -19,10 +19,10 @@
     </div>
     <div id="charts">
       <div class="chart">
-        <ve-line :data="chartLineData"></ve-line>
+        <ve-line :data="chartLineData" ></ve-line>
       </div>
       <div class="chart">
-        <ve-histogram :data="chartHistogramData" :settings="chartSettings"></ve-histogram>
+        <ve-histogram :data="chartHistogramData" :settings="chartSettings" ></ve-histogram>
       </div>
     </div>
     <Spin size="large" fix v-if="spinVisible"></Spin>
@@ -79,8 +79,8 @@ export default {
             metrics: ['设计师'],
             dimension: ['日期']
           }
-        },
 
+        },
         components: {
             VeLine,VeHistogram
         }

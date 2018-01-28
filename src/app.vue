@@ -200,6 +200,7 @@ var qs = require('qs');
                     $("#mainBoard").fadeIn(1100,function(){
                       $(this).show();
                     });
+                    that.$router.push("index");
                   }
                   else{
                     message.error(response.data.message);
