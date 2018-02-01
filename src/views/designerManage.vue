@@ -109,9 +109,15 @@
                         }
                         },
                         {
+                            title: '联系地址',
+                            key: 'address',
+                            align: 'center'
+                        },
+                        {
                             title: '描述',
                             key: 'introduce',
-                            align: 'center'
+                            align: 'center',
+                            width:'160px',
                         },
                         {
                             title: '操作',
