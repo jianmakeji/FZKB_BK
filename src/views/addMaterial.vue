@@ -64,6 +64,9 @@
                 <Option value="动物">动物</Option>
                 <Option value="植物">植物</Option>
                 <Option value="风景">风景</Option>
+                <Option value="外套">外套</Option>
+                <Option value="内搭">内搭</Option>
+                <Option value="下装">下装</Option>
             </Select>
         </FormItem>
         <FormItem label="简单--复杂" class="inputStyle">
