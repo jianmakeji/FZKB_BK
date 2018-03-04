@@ -24,7 +24,9 @@
         <FormItem label="真实姓名">
             <Input v-model="formItem.realname" placeholder="请输入设计师真实姓名"></Input>
         </FormItem>
-
+        <FormItem label="联系地址">
+            <Input v-model="formItem.address" placeholder="请输入设计师联系地址"></Input>
+        </FormItem>
         <FormItem label="简介">
             <Input v-model="formItem.introduce" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="设计师简介..."></Input>
         </FormItem>
@@ -45,7 +47,8 @@
                   username: '',
                   password: '',
                   realname: '',
-                  introduce: ''
+                  introduce: '',
+                  address:'',
               },
               spinVisible:false,
               id:0,
@@ -62,7 +65,8 @@
               username:this.formItem.username,
               realname: this.formItem.realname,
               password:this.formItem.password,
-              introduce:this.formItem.introduce
+              introduce:this.formItem.introduce,
+              address:this.formItem.address,
             };
 
             if (this.insertOrUpdate){
@@ -126,7 +130,7 @@
                        that.formItem.realname = response.data.object.realname;
                        that.formItem.categoryName = response.data.object.categoryName;
                        that.formItem.introduce = response.data.object.introduce;
-
+                       that.formItem.address = response.data.object.address;
                      } else {
                          message.error(response.data.message);
                      }
