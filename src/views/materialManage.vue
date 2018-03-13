@@ -83,16 +83,16 @@
             <div class="tag" v-for="item in category" @click="TagClick" :id="0" name="categoryName">{{item}}</div>
             </div>
           <div class="tagSection">
-            <Button type="text" class="conditionItem">简单-复杂：</Button>
+            <Button type="text" class="conditionItem">商务-休闲：</Button>
             <div class="tag" v-for="item in style1" @click="TagClick" :id="0" name="style1Name">{{item}}</div>
           </div>
 
           <div class="tagSection">
-            <Button type="text" class="conditionItem">硬朗-圆润：</Button>
+            <Button type="text" class="conditionItem">单色-杂色：</Button>
             <div class="tag" v-for="item in style2" @click="TagClick" :id="0" name="style2Name">{{item}}</div>
           </div>
           <div class="tagSection">
-            <Button type="text" class="conditionItem">冷酷-温暖：</Button>
+            <Button type="text" class="conditionItem">冷冬-暖夏：</Button>
             <div class="tag" v-for="item in style3" @click="TagClick" :id="0" name="style3Name">{{item}}</div>
           </div>
         </div>
@@ -147,17 +147,17 @@ export default {
                         key: 'number'
                     },
                     {
-                        title: '简单-复杂',
+                        title: '商务-休闲',
                         align: 'center',
                         key: 'style1'
                     },
                     {
-                        title: '硬朗-圆润',
+                        title: '单色-杂色',
                         align: 'center',
                         key: 'style2'
                     },
                     {
-                        title: '冷酷-温暖',
+                        title: '冷冬-暖夏',
                         align: 'center',
                         key: 'style3'
                     },
@@ -205,7 +205,7 @@ export default {
                 data: [
 
                 ],
-                category:['艺术品','建筑','动物','植物','风景'],
+                category:['艺术品','建筑','动物','植物','风景','外套','内搭','下装'],
                 style1:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
                 style2:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
                 style3:[-3,-2.5,-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3],
