@@ -188,6 +188,11 @@ export default {
                         }
                     },
                     {
+                        title: '名称',
+                        align: 'center',
+                        key: 'name'
+                    },
+                    {
                         title: '设计师',
                         align: 'center',
                         key: 'username'
