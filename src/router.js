@@ -3,7 +3,7 @@ const routers = [{
         meta: {
             title: '服装设计师看板数据管理系统'
         },
-        
+
     },{
             path: '/index',
             meta: {
@@ -58,6 +58,18 @@ const routers = [{
           title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/designerDetail.vue'], resolve)
+    },{
+      path: '/addCorporation/:id',
+      meta: {
+          title: '服装设计师看板数据管理系统'
+      },
+      component: (resolve) => require(['./views/addCorporation.vue'], resolve)
+    },{
+      path: '/corporationManage',
+      meta: {
+          title: '服装设计师看板数据管理系统'
+      },
+      component: (resolve) => require(['./views/corporationManage.vue'], resolve)
     }
 ];
 export default routers;

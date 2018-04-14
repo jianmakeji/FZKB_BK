@@ -53,13 +53,13 @@
       <div class="layout-breadcrumb">
           <Breadcrumb>
               <Breadcrumb-item id="BreadcrumbItem1" href="/"><Icon type="ios-home-outline"></Icon>首页</Breadcrumb-item>
-              <Breadcrumb-item id="BreadcrumbItem2" href="/designerManage"><Icon type="social-buffer-outline"></Icon>设计师管理</Breadcrumb-item>
+              <Breadcrumb-item id="BreadcrumbItem2" href="/corporationManage"><Icon type="social-buffer-outline"></Icon>服装企业管理</Breadcrumb-item>
           </Breadcrumb>
       </div>
       <hr style="height:1px;border:none;border-top:1px dashed #dddee1;"/>
       <div style="margin-top:10px">
-          <Button type="primary" class="addDesigner" @click="addDesigner">+ 添加设计师</Button>
-          <Button type="primary" icon="ios-search" class="searchBtn" @click="searchDesigner">搜索</Button>
+          <Button type="primary" class="addCorporation" @click="addCorporation">+ 添加服装企业</Button>
+          <Button type="primary" icon="ios-search" class="searchBtn" @click="searchCorporation">搜索</Button>
           <Input placeholder="请输入..." class="serarchText" v-model="searchKey"></Input>
       </div>
       <div style="margin-top:20px">
@@ -77,8 +77,8 @@
                 return {
                     columns: [
                         {
-                            title: '用户名',
-                            key: 'username',
+                            title: '企业名',
+                            key: 'name',
                             align: 'center',
                             width:'160px',
                             render: (h, params) => {
@@ -88,34 +88,34 @@
                                         type: 'person'
                                     }
                                 }),
-                                h('strong', params.row.username)
-                            ]);
-                        }
-                        },
-                        {
-                            title: '真实姓名',
-                            key: 'realname',
-                            align: 'center',
-                            width:'160px',
-                            render: (h, params) => {
-                            return h('div', [
-                                h('Icon', {
-                                    props: {
-                                        type: 'person'
-                                    }
-                                }),
-                                h('strong', params.row.realname)
+                                h('strong', params.row.name)
                             ]);
                         }
                         },
                         {
                             title: '联系地址',
                             key: 'address',
+                            align: 'center',
+                            width:'260px',
+                            render: (h, params) => {
+                            return h('div', [
+                                h('Icon', {
+                                    props: {
+                                        type: 'person'
+                                    }
+                                }),
+                                h('strong', params.row.address)
+                            ]);
+                        }
+                        },
+                        {
+                            title: '联系人',
+                            key: 'contact',
                             align: 'center'
                         },
                         {
-                            title: '描述',
-                            key: 'introduce',
+                            title: '联系电话',
+                            key: 'phone',
                             align: 'center',
                             width:'160px',
                         },
@@ -129,20 +129,6 @@
 
                                     h('Button', {
                                         props: {
-                                            type: 'info',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            marginRight: '5px'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.show(params.row.id)
-                                            }
-                                        }
-                                    }, '查看'),
-                                    h('Button', {
-                                        props: {
                                             type: 'primary',
                                             size: 'small'
                                         },
@@ -151,7 +137,7 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.$router.push('addDesigner/'+params.row.id);
+                                                this.$router.push('addCorporation/'+params.row.id);
                                             }
                                         }
                                     }, '修改'),
@@ -181,14 +167,11 @@
                 }
             },
             methods: {
-                show (index) {
-                    this.$router.push('designerDetail');
-                },
                 remove (index) {
                   this.spinVisible = true;
                   let that = this;
                   let message = this.$Message;
-                  util.ajax.delete('/designer/deleteDesigner/'+index, {
+                  util.ajax.delete('/corporation/deleteCorporation/'+index, {
                           headers: {
                               "Content-Type": "application/json"
                           }
@@ -207,26 +190,26 @@
                           message.error('获取数据操作失败!');
                       });
                 },
-                addDesigner(){
-                  this.$router.push('addDesigner');
+                addCorporation(){
+                  this.$router.push('addCorporation');
                 },
-                searchDesigner(){
-                  this.loadDesignerBySearchData(this.searchKey,10,0);
+                searchCorporation(){
+                  this.loadCorporationBySearchData(this.searchKey,10,0);
                 },
                 pageChange(pageNum){
                   this.currentPage = pageNum;
                   if (this.searchKey == ''){
-                    this.loadDesignerData(this.pageSize,(pageNum - 1)*this.pageSize);
+                    this.loadCorporationData(this.pageSize,(pageNum - 1)*this.pageSize);
                   }
                   else{
-                    this.loadDesignerBySearchData(this.searchKey,this.pageSize,(pageNum - 1)*this.pageSize);
+                    this.loadCorporationBySearchData(this.searchKey,this.pageSize,(pageNum - 1)*this.pageSize);
                   }
                 },
-                loadDesignerData(limit,offset){
+                loadCorporationData(limit,offset){
                   this.spinVisible = true;
                   let that = this;
                   let message = this.$Message;
-                  util.ajax.get('/designer/getDataByPage', {
+                  util.ajax.get('/corporation/getDataByPage', {
                           params:{
                             limit: limit,
                             offset: offset,
@@ -250,16 +233,16 @@
                           message.error('获取数据操作失败!');
                       });
                 },
-                loadDesignerBySearchData(realname,limit,offset){
+                loadCorporationBySearchData(name,limit,offset){
                   this.spinVisible = true;
                   let that = this;
                   let message = this.$Message;
                   this.currentPage = pageNum;
-                  util.ajax.get('/designer/getDesignerByRealname', {
+                  util.ajax.get('/corporation/getCorporationByName', {
                           params:{
                             limit: limit,
                             offset: offset,
-                            realname:realname
+                            name:name
                           }
                       }, {
                           headers: {
@@ -283,7 +266,7 @@
             },
             created(){
               this.currentPage = 1;
-              this.loadDesignerData(10,0);
+              this.loadCorporationData(10,0);
             }
         }
 </script>

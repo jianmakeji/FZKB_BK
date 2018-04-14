@@ -61,6 +61,7 @@
                       <Menu-item name="materialManage">灵感素材管理</Menu-item>
                       <Menu-item name="matchManage">搭配管理</Menu-item>
                       <Menu-item v-show="desingerMenu" name="designerManage">设计师管理</Menu-item>
+                      <Menu-item name="corporationManage">服装企业管理</Menu-item>
                       <Menu-item name="logOut">退出</Menu-item>
                   </Submenu>
               </i-menu>
@@ -163,6 +164,9 @@ var qs = require('qs');
               }
               else if (name == 'designerManage'){
                 this.$router.push('../designerManage');
+              }
+              else if (name == 'corporationManage'){
+                this.$router.push('../corporationManage');
               }
               else if (name == 'logOut'){
                 this.$router.push('../');
