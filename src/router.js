@@ -70,6 +70,12 @@ const routers = [{
           title: '服装设计师看板数据管理系统'
       },
       component: (resolve) => require(['./views/corporationManage.vue'], resolve)
+    },{
+      path: '/addCorporation',
+      meta: {
+          title: '服装设计师看板数据管理系统'
+      },
+      component: (resolve) => require(['./views/addCorporation.vue'], resolve)
     }
 ];
 export default routers;

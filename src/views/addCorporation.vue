@@ -52,7 +52,7 @@
           }
         },
         methods: {
-          addDesigner(){
+          addCorporation(){
             this.$Loading.start();
             let message = this.$Message;
             let that = this;

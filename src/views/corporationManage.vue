@@ -80,7 +80,7 @@
                             title: '企业名',
                             key: 'name',
                             align: 'center',
-                            width:'160px',
+                            width:'260px',
                             render: (h, params) => {
                             return h('div', [
                                 h('Icon', {
@@ -237,7 +237,6 @@
                   this.spinVisible = true;
                   let that = this;
                   let message = this.$Message;
-                  this.currentPage = pageNum;
                   util.ajax.get('/corporation/getCorporationByName', {
                           params:{
                             limit: limit,
